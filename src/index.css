@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth scrolling for entire page - enhanced */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Ocultar cursor nativo en desktop */
+@media (min-width: 768px) {
+  * {
+    cursor: none !important;
+  }
+}
+
+/* Custom Cursor Styles */
+.custom-cursor-dot {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  mix-blend-mode: difference;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+.custom-cursor-outline {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #10b981;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.cursor-text {
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  mix-blend-mode: normal;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Dark mode cursor adjustments */
+.dark .custom-cursor-dot {
+  background: linear-gradient(135deg, #34d399, #10b981);
+  box-shadow: 0 0 25px rgba(52, 211, 153, 0.6);
+}
+
+.dark .custom-cursor-outline {
+  border-color: #34d399;
+  box-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
+}
