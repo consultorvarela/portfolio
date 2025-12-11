@@ -1,24 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Download, Globe, Github, Linkedin, Star, Mail, MapPin, ArrowDown, Database, Server, Code, Terminal, GraduationCap, Briefcase, Moon, Sun } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Download, Globe, Github, Linkedin, Star, Mail, MapPin, ArrowDown, Database, Server, Code, Terminal, GraduationCap, Briefcase, Moon, Sun, Award, ExternalLink } from 'lucide-react';
 import { FaReact, FaNodeJs, FaPython, FaAws } from 'react-icons/fa';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from './ThemeContext';
 import CustomCursor from './CustomCursor';
+import Particles3D from './Particles3D';
 
-// Componente de texto con animación de escritura
+// Componente de texto con animación de escritura con error y corrección
 const TypewriterText = ({ text, delay = 0 }) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [hasTypedError, setHasTypedError] = useState(false);
+
+  // Posición donde ocurre el error (mitad del texto aproximadamente)
+  const errorPosition = Math.floor(text.length / 2);
+  const errorText = "Helo"; // Texto con error
+  const correctPortion = text.substring(0, errorPosition);
 
   useEffect(() => {
-    if (currentIndex < text.length) {
+    // Si estamos en la posición del error y no hemos cometido el error aún
+    if (currentIndex === errorPosition && !hasTypedError && !isDeleting) {
+      const timeout = setTimeout(() => {
+        setDisplayText(correctPortion + errorText);
+        setHasTypedError(true);
+        // Pausar antes de empezar a borrar
+        setTimeout(() => setIsDeleting(true), 400);
+      }, 30);
+      return () => clearTimeout(timeout);
+    }
+
+    // Si estamos borrando el error
+    if (isDeleting) {
+      if (displayText.length > errorPosition) {
+        const timeout = setTimeout(() => {
+          setDisplayText(displayText.slice(0, -1));
+        }, 50);
+        return () => clearTimeout(timeout);
+      } else {
+        // Terminamos de borrar, continuamos escribiendo correctamente
+        setIsDeleting(false);
+        setCurrentIndex(errorPosition);
+      }
+    }
+
+    // Escritura normal
+    if (!isDeleting && currentIndex < text.length && (currentIndex < errorPosition || hasTypedError)) {
       const timeout = setTimeout(() => {
         setDisplayText(prev => prev + text[currentIndex]);
         setCurrentIndex(prev => prev + 1);
-      }, 50 + delay);
+      }, 20 + delay);
       return () => clearTimeout(timeout);
     }
-  }, [currentIndex, text, delay]);
+  }, [currentIndex, text, delay, isDeleting, displayText, hasTypedError, errorPosition, correctPortion, errorText]);
 
   return <span>{displayText}</span>;
 };
@@ -87,11 +121,10 @@ const Portfolio = () => {
   const [activeSection, setActiveSection] = useState('home');
   const { isDark, toggleTheme } = useTheme();
 
-  // Parallax scroll effect
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 150]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -100]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  // Parallax scroll effect - Disabled
+  // const { scrollY } = useScroll();
+  // const y1 = useTransform(scrollY, [0, 500], [0, 150]);
+  // const y2 = useTransform(scrollY, [0, 500], [0, -100]);
 
   // Datos de Educación y Experiencia
   const educationData = [
@@ -144,7 +177,7 @@ const Portfolio = () => {
   // Update active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'skills', 'experience', 'services', 'projects', 'contact'];
+      const sections = ['home', 'about', 'skills', 'certifications', 'experience', 'services', 'projects', 'contact'];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -175,8 +208,8 @@ const Portfolio = () => {
 
         {/* Desktop Menu */}
         <div className={`hidden md:flex items-center gap-8 font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-          {['Inicio', 'Acerca', 'Habilidades', 'Experiencia', 'Servicios', 'Proyectos', 'Contacto'].map((item, index) => {
-            const ids = ['home', 'about', 'skills', 'experience', 'services', 'projects', 'contact'];
+          {['Inicio', 'Acerca', 'Habilidades', 'Certificados', 'Experiencia', 'Servicios', 'Proyectos', 'Contacto'].map((item, index) => {
+            const ids = ['home', 'about', 'skills', 'certifications', 'experience', 'services', 'projects', 'contact'];
             const id = ids[index];
             const isActive = activeSection === id;
             return (
@@ -218,53 +251,129 @@ const Portfolio = () => {
           </button>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+        {/* Mobile Menu Fullscreen */}
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className={`absolute top-full left-0 right-0 p-6 flex flex-col gap-4 md:hidden shadow-lg border-b ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'}`}>
-             {['Inicio', 'Acerca', 'Habilidades', 'Experiencia', 'Servicios', 'Proyectos', 'Contacto'].map((item, index) => {
-              const ids = ['home', 'about', 'skills', 'experience', 'services', 'projects', 'contact'];
-              return (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(ids[index])}
-                  className="text-left py-2 font-medium text-lg border-b border-gray-50 last:border-0"
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'tween', duration: 0.3 }}
+            className={`fixed inset-0 z-50 md:hidden flex flex-col ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
+
+            {/* Header del menú móvil */}
+            <div className={`flex justify-between items-center p-6 border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-emerald-400 flex items-center justify-center">
+                  <span className="text-white font-bold text-lg italic">P</span>
+                </div>
+                <span className="font-bold text-xl tracking-tight">Pedro</span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={toggleTheme}
+                  className={`p-2 rounded-full transition-colors ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}
                 >
-                  {item}
+                  {isDark ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-gray-700" />}
+                </motion.button>
+
+                <button className="p-2" onClick={() => setIsMenuOpen(false)}>
+                  <X size={28} />
                 </button>
-              );
-            })}
+              </div>
+            </div>
+
+            {/* Links del menú */}
+            <div className="flex-1 flex flex-col justify-center px-8 py-12 gap-2">
+              {['Inicio', 'Acerca', 'Habilidades', 'Certificados', 'Experiencia', 'Servicios', 'Proyectos', 'Contacto'].map((item, index) => {
+                const ids = ['home', 'about', 'skills', 'certifications', 'experience', 'services', 'projects', 'contact'];
+                const id = ids[index];
+                const isActive = activeSection === id;
+
+                return (
+                  <motion.button
+                    key={item}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    onClick={() => scrollToSection(id)}
+                    className={`text-left py-4 font-bold text-3xl border-b transition-colors ${
+                      isDark ? 'border-gray-800' : 'border-gray-100'
+                    } ${
+                      isActive
+                        ? 'text-emerald-400'
+                        : isDark ? 'text-white hover:text-emerald-400' : 'text-gray-900 hover:text-emerald-500'
+                    }`}
+                  >
+                    <span className="flex items-center gap-3">
+                      {isActive && <span className="w-2 h-2 rounded-full bg-emerald-400"></span>}
+                      {item}
+                    </span>
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {/* Footer del menú móvil */}
+            <div className={`p-6 border-t ${isDark ? 'border-gray-800' : 'border-gray-100'}`}>
+              <div className="flex justify-center gap-4">
+                <motion.a
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  href="#"
+                  className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all ${isDark ? 'border-gray-600 hover:bg-white hover:text-black hover:border-white' : 'border-gray-300 hover:bg-black hover:text-white hover:border-black'}`}>
+                  <Github size={20} />
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  href="#"
+                  className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all ${isDark ? 'border-gray-600 hover:bg-white hover:text-black hover:border-white' : 'border-gray-300 hover:bg-black hover:text-white hover:border-black'}`}>
+                  <Globe size={20} />
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  href="#"
+                  className="w-12 h-12 rounded-full bg-emerald-400 border border-emerald-400 text-white flex items-center justify-center hover:bg-emerald-500 transition-all">
+                  <Linkedin size={20} />
+                </motion.a>
+              </div>
+            </div>
           </motion.div>
         )}
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-6 md:px-12 overflow-hidden max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-6 md:px-12 overflow-hidden">
+        {/* Partículas 3D de fondo - Todo el ancho */}
+        <div className="absolute inset-0 left-0 right-0 z-0 opacity-30 w-screen ml-[calc(-50vw+50%)]">
+          <Particles3D />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 max-w-7xl mx-auto">
 
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            style={{ y: y2, opacity }}
-            className="relative z-10 space-y-8">
+            className="relative z-10 space-y-6 md:space-y-8 text-center lg:text-left order-2 lg:order-1">
             {/* Dev Tool Badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-block relative">
-              <div className={`border-2 border-emerald-400 px-4 py-2 rounded-sm relative ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+              className="inline-block relative mx-auto lg:mx-0">
+              <div className={`border-2 border-emerald-400 px-3 py-2 md:px-4 rounded-sm relative ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
                 <div className={`absolute -top-1.5 -left-1.5 w-2.5 h-2.5 bg-emerald-400 border ${isDark ? 'border-gray-800' : 'border-white'}`}></div>
                 <div className={`absolute -top-1.5 -right-1.5 w-2.5 h-2.5 bg-emerald-400 border ${isDark ? 'border-gray-800' : 'border-white'}`}></div>
                 <div className={`absolute -bottom-1.5 -left-1.5 w-2.5 h-2.5 bg-emerald-400 border ${isDark ? 'border-gray-800' : 'border-white'}`}></div>
                 <div className={`absolute -bottom-1.5 -right-1.5 w-2.5 h-2.5 bg-emerald-400 border ${isDark ? 'border-gray-800' : 'border-white'}`}></div>
-                <span className="font-bold text-sm md:text-base font-mono">
-                  <TypewriterText text="console.log(&quot;Hello World! I'm Pedro&quot;)" delay={300} />
+                <span className="font-bold text-xs md:text-base font-mono">
+                  <TypewriterText text="console.log(&quot;Hello World! I'm Pedro Varela&quot;)" delay={200} />
                   <motion.span
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ duration: 0.8, repeat: Infinity }}
@@ -273,33 +382,35 @@ const Portfolio = () => {
               </div>
             </motion.div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.1] tracking-tight">
-              Desarrollador Fullstack <br />
-              Con base en <span className="text-emerald-500/90 text-black">California</span>
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
+              <span className="block lg:inline">Desarrollador Fullstack</span>
+              <br className="hidden lg:block" />
+              <span className="block lg:inline"> Con base en </span>
+              <span className="text-emerald-500/90 text-black">Honduras</span>
             </h1>
 
-            <p className="text-gray-500 text-lg md:text-xl max-w-lg leading-relaxed">
-              Arquitecto aplicaciones web escalables y experiencias digitales fluidas. Desde backends robustos hasta frontends interactivos, codifico soluciones que impulsan el crecimiento empresarial.
+            <p className="text-gray-500 text-base md:text-lg lg:text-xl max-w-lg mx-auto lg:mx-0 leading-relaxed">
+              Transformo ideas en soluciones digitales escalables. Especializado en crear aplicaciones web de alto rendimiento con arquitecturas backend sólidas y experiencias frontend intuitivas.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-5 pt-2">
-              <button onClick={() => scrollToSection('contact')} className="relative group">
+            <div className="flex flex-row gap-3 md:gap-5 pt-2 justify-center lg:justify-start">
+              <button onClick={() => scrollToSection('contact')} className="relative group flex-1 md:flex-none">
                 <div className="absolute inset-0 bg-emerald-400 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
-                <div className="relative bg-black text-white px-8 py-4 font-bold flex items-center gap-2 border-2 border-transparent transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5">
-                  Contrátame <ArrowUpRight size={20} />
+                <div className="relative bg-black text-white px-6 md:px-8 py-3 md:py-4 font-bold flex items-center justify-center gap-2 border-2 border-transparent transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5 text-sm md:text-base">
+                  Contrátame <ArrowUpRight size={18} className="md:w-5 md:h-5" />
                 </div>
               </button>
 
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`flex items-center gap-2 px-8 py-4 font-bold border-2 transition-colors ${isDark ? 'border-gray-600 hover:border-emerald-400 bg-gray-800 text-white' : 'border-gray-200 hover:border-black bg-white'}`}>
-                Descargar CV <Download size={20} />
+                className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 font-bold border-2 transition-colors text-sm md:text-base ${isDark ? 'border-gray-600 hover:border-emerald-400 bg-gray-800 text-white' : 'border-gray-200 hover:border-black bg-white'}`}>
+                CV <Download size={18} className="md:w-5 md:h-5" />
               </motion.button>
             </div>
 
-            <div className="flex items-center gap-4 pt-6">
-              <span className={`text-sm font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Encuéntrame en:</span>
+            <div className="flex items-center justify-center lg:justify-start gap-4 pt-4">
+              <span className={`text-xs md:text-sm font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Sígueme:</span>
               <div className="flex gap-3">
                 <motion.a
                   whileHover={{ scale: 1.1 }}
@@ -331,8 +442,7 @@ const Portfolio = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ y: y1 }}
-            className="relative h-[500px] md:h-[600px] w-full flex items-center justify-center lg:justify-end">
+            className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full flex items-center justify-center lg:justify-end order-1 lg:order-2">
              {/* Abstract Shapes */}
             <motion.div
               animate={{ y: [0, -20, 0] }}
@@ -348,10 +458,10 @@ const Portfolio = () => {
             {/* Photo Frame */}
             <div className="relative z-10 w-full max-w-md bg-gray-100 h-full max-h-[550px] overflow-hidden shadow-2xl border-4 border-black">
               {/* Developer stock image */}
-              <img 
-                src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1000&auto=format&fit=crop" 
-                alt="Pedro Varela" 
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+              <img
+                src="./img/herovarela.png"
+                alt="Pedro Varela"
+                className="w-full h-full object-cover object-left grayscale hover:grayscale-0 transition-all duration-500"
               />
             </div>
             
@@ -417,7 +527,7 @@ const Portfolio = () => {
           <div className="order-2 md:order-1 relative">
             <div className="absolute -inset-4 bg-emerald-100 rounded-lg transform -rotate-3"></div>
             <img 
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+              src="./img/aboutmevarela.png" 
               alt="Coding Workspace" 
               className="relative rounded-lg shadow-xl w-full object-cover h-[500px]"
             />
@@ -464,6 +574,31 @@ const Portfolio = () => {
             </div>
           </div>
         </div>
+
+        {/* Stats Row Below About Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          viewport={{ once: true }}
+          className="mt-16 max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div>
+            <p className="text-4xl md:text-5xl font-bold text-emerald-500 mb-2">3+</p>
+            <p className={`text-sm md:text-base uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Certificaciones</p>
+          </div>
+          <div>
+            <p className="text-4xl md:text-5xl font-bold text-emerald-500 mb-2">5+</p>
+            <p className={`text-sm md:text-base uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Años Experiencia</p>
+          </div>
+          <div>
+            <p className="text-4xl md:text-5xl font-bold text-emerald-500 mb-2">50+</p>
+            <p className={`text-sm md:text-base uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Proyectos Completados</p>
+          </div>
+          <div>
+            <p className="text-4xl md:text-5xl font-bold text-emerald-500 mb-2">10+</p>
+            <p className={`text-sm md:text-base uppercase tracking-wider font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Tecnologías Implementadas</p>
+          </div>
+        </motion.div>
       </motion.section>
 
       {/* SKILL TREE SECTION */}
@@ -471,12 +606,12 @@ const Portfolio = () => {
          <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16 max-w-2xl mx-auto">
                <h4 className="text-emerald-400 font-bold uppercase tracking-widest text-sm mb-4">Competencia Técnica</h4>
-               <h2 className="text-4xl md:text-5xl font-bold mb-6">Mi Árbol de Habilidades</h2>
-               <p className="text-gray-400 text-lg">Un desglose de mis capacidades técnicas en toda la pila.</p>
+               <h2 className="text-4xl md:text-5xl font-bold mb-6">Mi Stack Tecnológico</h2>
+               <p className="text-gray-400 text-lg">Herramientas y tecnologías con las que construyo soluciones de alto impacto.</p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-               
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
                {/* Frontend */}
                <div className="space-y-6">
                   <div className="flex items-center gap-3 mb-6">
@@ -484,10 +619,10 @@ const Portfolio = () => {
                      <h3 className="text-2xl font-bold">Frontend</h3>
                   </div>
                   {[
-                     { name: 'React / Next.js', level: '95%' },
+                     { name: 'React / Next.js', level: '90%' },
                      { name: 'TypeScript', level: '90%' },
-                     { name: 'Tailwind CSS', level: '95%' },
-                     { name: 'Vue.js', level: '80%' },
+                     { name: 'Tailwind CSS', level: '75%' },
+                     { name: 'Angular', level: '80%' },
                   ].map((skill, idx) => (
                      <motion.div
                         key={skill.name}
@@ -519,10 +654,10 @@ const Portfolio = () => {
                      <h3 className="text-2xl font-bold">Backend</h3>
                   </div>
                    {[
+                     { name: 'Python / Django / Flask', level: '95%' },
                      { name: 'Node.js', level: '90%' },
-                     { name: 'Python / Django', level: '85%' },
-                     { name: 'Go', level: '70%' },
-                     { name: 'GraphQL', level: '80%' },
+                     { name: 'PHP / Laravel', level: '70%' },
+                     { name: 'ASP.net', level: '80%' },
                   ].map((skill, idx) => (
                      <motion.div
                         key={skill.name}
@@ -547,6 +682,45 @@ const Portfolio = () => {
                   ))}
                </div>
 
+               {/* Mobile Development */}
+               <div className="space-y-6">
+                  <div className="flex items-center gap-3 mb-6">
+                     <Terminal className="text-emerald-400" />
+                     <h3 className="text-2xl font-bold">Desarrollo Móvil</h3>
+                  </div>
+                   {[
+                     { name: 'Ionic', level: '90%' },
+                     { name: 'React Native', level: '80%' },
+                     { name: 'Java / Kotlin', level: '80%' },
+                     { name: 'Swift', level: '50%' },
+                  ].map((skill, idx) => (
+                     <motion.div
+                        key={skill.name}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: idx * 0.1 }}
+                        viewport={{ once: true }}>
+                        <div className="flex justify-between mb-1">
+                           <span className="font-medium text-sm">{skill.name}</span>
+                           <span className="text-emerald-400 text-sm">{skill.level}</span>
+                        </div>
+                        <div className="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                           <motion.div
+                              className="bg-emerald-400 h-2 rounded-full"
+                              initial={{ width: '0%' }}
+                              whileInView={{ width: skill.level }}
+                              transition={{ duration: 1, delay: idx * 0.1 + 0.2, ease: "easeOut" }}
+                              viewport={{ once: true }}
+                           />
+                        </div>
+                     </motion.div>
+                  ))}
+               </div>
+
+            </div>
+
+            {/* Databases & Tools Row */}
+            <div className="grid md:grid-cols-2 gap-8 mt-12">
                {/* Databases */}
                <div className="space-y-6">
                   <div className="flex items-center gap-3 mb-6">
@@ -588,11 +762,172 @@ const Portfolio = () => {
                      ))}
                    </div>
                </div>
-
             </div>
          </div>
       </section>
-      
+
+      {/* CERTIFICATIONS SECTION */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        id="certifications"
+        className={`py-24 px-6 md:px-12 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <h4 className="text-emerald-500 font-bold uppercase tracking-widest text-sm mb-4">Validación Profesional</h4>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Certificaciones</h2>
+            <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Certificado por las empresas tecnológicas líderes de la industria.</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Cisco Certification */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0 }}
+              viewport={{ once: true }}
+              className={`group relative p-8 border-2 transition-all hover:shadow-2xl hover:-translate-y-2 ${isDark ? 'bg-gray-800 border-gray-700 hover:border-emerald-400' : 'bg-white border-gray-200 hover:border-emerald-500'}`}>
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <ExternalLink size={20} className="text-emerald-500" />
+              </div>
+
+              <div className="flex items-center justify-center mb-6 h-20">
+                {/* Cisco Logo - Color azul característico */}
+                <svg className="w-32 h-16" viewBox="0 0 200 80" fill="none">
+                  <rect x="10" y="15" width="8" height="50" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="10" y="15" width="8" height="25" fill="#049fd9" opacity="0.7"/>
+                  <rect x="25" y="10" width="8" height="60" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="25" y="10" width="8" height="30" fill="#049fd9" opacity="0.7"/>
+                  <rect x="40" y="20" width="8" height="45" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="40" y="20" width="8" height="22" fill="#049fd9" opacity="0.7"/>
+                  <rect x="80" y="15" width="8" height="50" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="80" y="15" width="8" height="25" fill="#049fd9" opacity="0.7"/>
+                  <rect x="95" y="10" width="8" height="60" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="95" y="10" width="8" height="30" fill="#049fd9" opacity="0.7"/>
+                  <rect x="110" y="20" width="8" height="45" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="110" y="20" width="8" height="22" fill="#049fd9" opacity="0.7"/>
+                  <rect x="125" y="25" width="8" height="40" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="125" y="25" width="8" height="20" fill="#049fd9" opacity="0.7"/>
+                  <rect x="140" y="15" width="8" height="50" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="140" y="15" width="8" height="25" fill="#049fd9" opacity="0.7"/>
+                  <rect x="155" y="20" width="8" height="45" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="155" y="20" width="8" height="22" fill="#049fd9" opacity="0.7"/>
+                  <rect x="170" y="25" width="8" height="40" fill="#049fd9" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="170" y="25" width="8" height="20" fill="#049fd9" opacity="0.7"/>
+                </svg>
+              </div>
+
+              <div className="text-center">
+                <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Cisco Certified</h3>
+                <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Network Professional</p>
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <Award size={16} className="text-emerald-500" />
+                  <span className="text-sm font-mono text-emerald-500">CCNA / CCNP</span>
+                </div>
+                <a href="#" className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">
+                  Ver Credencial <ExternalLink size={14} />
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Google Certification */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className={`group relative p-8 border-2 transition-all hover:shadow-2xl hover:-translate-y-2 ${isDark ? 'bg-gray-800 border-gray-700 hover:border-emerald-400' : 'bg-white border-gray-200 hover:border-emerald-500'}`}>
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <ExternalLink size={20} className="text-emerald-500" />
+              </div>
+
+              <div className="flex items-center justify-center mb-6 h-20">
+                {/* Google Logo */}
+                <svg className="w-24 h-24" viewBox="0 0 100 100" fill="none">
+                  <path d="M50 20C33.43 20 20 33.43 20 50C20 66.57 33.43 80 50 80C66.57 80 80 66.57 80 50C80 48.5 79.87 47.03 79.63 45.6H50V54.4H66.32C65.42 58.93 62.52 62.73 58.37 65.07V71.43H69.58C75.83 65.63 79.5 57.4 79.5 48C79.5 46.5 79.37 45.03 79.13 43.6H50V52.4H66.32C65.67 55.43 64.03 58.07 61.67 59.93L50 59.93V52.4H66.32C65.67 55.43 64.03 58.07 61.67 59.93" fill="#4285F4" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <circle cx="50" cy="50" r="25" stroke="#EA4335" strokeWidth="3" className="group-hover:stroke-emerald-500 transition-colors" fill="none"/>
+                  <path d="M35 50C35 45.5 36.5 41.5 39 38.5L31 32C26.5 37 24 43 24 50C24 57 26.5 63 31 68L39 61.5C36.5 58.5 35 54.5 35 50Z" fill="#FBBC05" className="group-hover:fill-emerald-600 transition-colors"/>
+                  <path d="M50 65C54.5 65 58.5 63.5 61.5 61L69 67C63 71.5 56 74 50 74C43 74 37 71.5 32 68L40 61.5C42 63.5 45.5 65 50 65Z" fill="#34A853" className="group-hover:fill-emerald-700 transition-colors"/>
+                </svg>
+              </div>
+
+              <div className="text-center">
+                <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Google Cloud</h3>
+                <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Certified Professional</p>
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <Award size={16} className="text-emerald-500" />
+                  <span className="text-sm font-mono text-emerald-500">GCP Developer</span>
+                </div>
+                <a href="#" className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">
+                  Ver Credencial <ExternalLink size={14} />
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Microsoft Certification */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className={`group relative p-8 border-2 transition-all hover:shadow-2xl hover:-translate-y-2 ${isDark ? 'bg-gray-800 border-gray-700 hover:border-emerald-400' : 'bg-white border-gray-200 hover:border-emerald-500'}`}>
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <ExternalLink size={20} className="text-emerald-500" />
+              </div>
+
+              <div className="flex items-center justify-center mb-6 h-20">
+                {/* Microsoft Logo - 4 cuadrados */}
+                <svg className="w-20 h-20" viewBox="0 0 100 100" fill="none">
+                  <rect x="10" y="10" width="38" height="38" fill="#F25022" className="group-hover:fill-emerald-500 transition-colors"/>
+                  <rect x="52" y="10" width="38" height="38" fill="#7FBA00" className="group-hover:fill-emerald-600 transition-colors"/>
+                  <rect x="10" y="52" width="38" height="38" fill="#00A4EF" className="group-hover:fill-emerald-400 transition-colors"/>
+                  <rect x="52" y="52" width="38" height="38" fill="#FFB900" className="group-hover:fill-emerald-300 transition-colors"/>
+                </svg>
+              </div>
+
+              <div className="text-center">
+                <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Microsoft Azure</h3>
+                <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Certified Developer</p>
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <Award size={16} className="text-emerald-500" />
+                  <span className="text-sm font-mono text-emerald-500">AZ-204</span>
+                </div>
+                <a href="#" className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">
+                  Ver Credencial <ExternalLink size={14} />
+                </a>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Stats Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <p className="text-4xl font-bold text-emerald-500 mb-2">3+</p>
+              <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Certificaciones</p>
+            </div>
+            <div>
+              <p className="text-4xl font-bold text-emerald-500 mb-2">5+</p>
+              <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Años Experiencia</p>
+            </div>
+            <div>
+              <p className="text-4xl font-bold text-emerald-500 mb-2">50+</p>
+              <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Proyectos Completados</p>
+            </div>
+            <div>
+              <p className="text-4xl font-bold text-emerald-500 mb-2">10+</p>
+              <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Tecnologías Implementadas</p>
+            </div>
+          </motion.div>
+        </div>
+      </motion.section>
+
       {/* EXPERIENCE SECTION */}
       <section id="experience" className="py-24 px-6 md:px-12 bg-black text-white">
         <div className="max-w-7xl mx-auto">
@@ -742,38 +1077,56 @@ const Portfolio = () => {
         className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div>
-            <h4 className="text-emerald-500 font-bold uppercase tracking-widest text-sm mb-4">Portafolio</h4>
-            <h2 className="text-4xl md:text-5xl font-bold">Despliegues Destacados</h2>
+            <h4 className="text-emerald-500 font-bold uppercase tracking-widest text-sm mb-4">Proyectos Destacados</h4>
+            <h2 className="text-4xl md:text-5xl font-bold">Soluciones Empresariales</h2>
+            <p className={`mt-4 text-lg max-w-2xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              Proyectos desarrollados para clientes empresariales bajo acuerdos de confidencialidad.
+            </p>
           </div>
-          <motion.button
+          <motion.a
+            href="https://github.com/pedrovarela"
+            target="_blank"
+            rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`px-6 py-3 border-2 font-bold transition-colors ${isDark ? 'border-white hover:bg-white hover:text-black' : 'border-black hover:bg-black hover:text-white'}`}>
-            Ver GitHub
-          </motion.button>
+            className={`px-6 py-3 border-2 font-bold transition-colors flex items-center gap-2 ${isDark ? 'border-white hover:bg-white hover:text-black' : 'border-black hover:bg-black hover:text-white'}`}>
+            Ver GitHub <ExternalLink size={18} />
+          </motion.a>
         </div>
 
         <div className="grid md:grid-cols-2 gap-10">
           {[
             {
-              title: "Panel de Analíticas SaaS",
-              cat: "React • Node.js • MongoDB",
-              img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+              title: "Sistema de Gestión Empresarial",
+              cat: "React • Node.js • PostgreSQL",
+              type: "Cliente Confidencial",
+              impact: "Reducción del 40% en tiempo de procesamiento",
+              role: "Lead Fullstack Developer",
+              confidential: true
             },
             {
-              title: "Plataforma de E-Commerce",
-              cat: "Next.js • Stripe • Postgres",
-              img: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+              title: "Plataforma de E-Commerce B2B",
+              cat: "Next.js • Python • AWS",
+              type: "Retail - Fortune 500",
+              impact: "100K+ transacciones mensuales procesadas",
+              role: "Backend Architect",
+              confidential: true
             },
             {
-              title: "Aplicación de Chat en Tiempo Real",
-              cat: "Socket.io • Redis • Express",
-              img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+              title: "App Móvil de Logística",
+              cat: "React Native • Django • PostgreSQL",
+              type: "Industria Logística",
+              impact: "50+ vehículos monitoreados en tiempo real",
+              role: "Mobile Lead Developer",
+              confidential: true
             },
             {
-              title: "Generador de Imágenes IA",
-              cat: "Python • OpenAI API • React",
-              img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+              title: "Sistema de Inventario IoT",
+              cat: "Angular • Python • MongoDB • AWS IoT",
+              type: "Manufactura",
+              impact: "500+ sensores integrados, 99.9% uptime",
+              role: "Fullstack Developer",
+              confidential: true
             }
           ].map((project, idx) => (
             <motion.div
@@ -782,29 +1135,73 @@ const Portfolio = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className={`project-card group cursor-pointer p-4 backdrop-blur-lg transition-all hover:shadow-2xl ${isDark ? 'bg-white/5 hover:bg-white/10' : 'bg-white/60 hover:bg-white/80'}`}
+              className={`project-card group p-6 backdrop-blur-lg transition-all hover:shadow-2xl border-2 ${isDark ? 'bg-gray-800/50 border-gray-700 hover:border-emerald-400' : 'bg-white/80 border-gray-200 hover:border-emerald-500'}`}
               style={{
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
               }}>
-              <div className="relative overflow-hidden mb-6 aspect-[4/3]">
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all z-10"></div>
-                <img 
-                  src={project.img} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0">
-                  <div className="bg-white p-3 rounded-full">
-                    <Github className="w-6 h-6" />
-                  </div>
+
+              {/* Header with confidential badge */}
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-2 group-hover:text-emerald-500 transition-colors">{project.title}</h3>
+                  <p className={`text-sm font-semibold mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{project.type}</p>
                 </div>
+                {project.confidential && (
+                  <div className="flex items-center gap-1 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
+                    <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                    <span className="text-emerald-500 text-xs font-bold uppercase">NDA</span>
+                  </div>
+                )}
               </div>
-              <h3 className="text-2xl font-bold mb-2 group-hover:text-emerald-500 transition-colors">{project.title}</h3>
-              <p className="text-gray-500 font-medium uppercase tracking-wide text-sm font-mono">{project.cat}</p>
+
+              {/* Tech Stack */}
+              <p className={`font-medium uppercase tracking-wide text-sm font-mono mb-4 pb-4 border-b ${isDark ? 'text-gray-500 border-gray-700' : 'text-gray-500 border-gray-200'}`}>
+                {project.cat}
+              </p>
+
+              {/* Role */}
+              <div className="mb-3">
+                <p className={`text-xs uppercase tracking-wider font-bold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Mi Rol</p>
+                <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{project.role}</p>
+              </div>
+
+              {/* Impact */}
+              <div className="mb-4">
+                <p className={`text-xs uppercase tracking-wider font-bold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Impacto</p>
+                <p className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{project.impact}</p>
+              </div>
+
+              {/* Footer note */}
+              <div className={`mt-4 pt-4 border-t text-xs italic ${isDark ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-500'}`}>
+                Código fuente bajo acuerdo de confidencialidad con el cliente
+              </div>
             </motion.div>
           ))}
         </div>
+
+        {/* Open Source CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className={`mt-16 p-8 rounded-2xl border-2 text-center ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
+          <h3 className="text-2xl font-bold mb-3">¿Quieres ver código real?</h3>
+          <p className={`mb-6 max-w-2xl mx-auto ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            Visita mi GitHub para proyectos open source donde demuestro las mismas tecnologías y arquitecturas que uso en proyectos empresariales.
+          </p>
+          <motion.a
+            href="https://github.com/pedrovarela"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-2 bg-emerald-500 text-white px-8 py-4 font-bold rounded-lg hover:bg-emerald-600 transition-colors">
+            <Github size={20} />
+            Ver Proyectos Open Source
+          </motion.a>
+        </motion.div>
       </motion.section>
 
       {/* Contact Section */}
@@ -852,7 +1249,7 @@ const Portfolio = () => {
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm">Ubicación</p>
-                  <p className="text-xl font-bold">San Francisco, CA</p>
+                  <p className="text-xl font-bold">Honduras</p>
                 </div>
               </div>
             </div>
