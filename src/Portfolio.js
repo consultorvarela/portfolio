@@ -58,62 +58,94 @@ const TypewriterText = ({ text, delay = 0 }) => {
 };
 
 // Componente para un ítem de la línea de tiempo (Educación o Experiencia)
-const TimelineItem = ({ year, title, subtitle, description, isLast = false, icon: Icon, index }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -50 }}
-    whileInView={{ opacity: 1, x: 0 }}
-    transition={{ duration: 0.6, delay: index * 0.2 }}
-    viewport={{ once: true, margin: "-50px" }}
-    className="flex relative">
-    {/* Línea divisoria, se extiende hasta el final excepto en el último ítem */}
-    {!isLast && (
+const TimelineItem = ({ year, title, subtitle, description, isLast = false, icon: Icon, index, showDescription = true }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.2 }}
+      viewport={{ once: true, margin: "-50px" }}
+      className="flex relative">
+      {/* Línea divisoria, se extiende hasta el final excepto en el último ítem */}
+      {!isLast && (
+        <motion.div
+          initial={{ height: 0 }}
+          whileInView={{ height: "100%" }}
+          transition={{ duration: 0.8, delay: index * 0.2 + 0.3 }}
+          viewport={{ once: true }}
+          className="w-0.5 bg-gradient-to-b from-emerald-400 to-gray-700 absolute left-[1.15rem] top-0"
+        />
+      )}
+
+      {/* Círculo del punto de la línea de tiempo */}
       <motion.div
-        initial={{ height: 0 }}
-        whileInView={{ height: "100%" }}
-        transition={{ duration: 0.8, delay: index * 0.2 + 0.3 }}
+        initial={{ scale: 0, rotate: -180 }}
+        whileInView={{ scale: 1, rotate: 0 }}
+        transition={{
+          duration: 0.5,
+          delay: index * 0.2 + 0.1,
+          type: "spring",
+          stiffness: 200,
+          damping: 10
+        }}
         viewport={{ once: true }}
-        className="w-0.5 bg-gradient-to-b from-emerald-400 to-gray-700 absolute left-[1.15rem] top-0"
-      />
-    )}
+        whileHover={{ scale: 1.2, rotate: 360 }}
+        className="h-10 w-10 min-w-10 rounded-full bg-emerald-400 flex items-center justify-center absolute left-0 top-0 z-10 border-4 border-black shadow-lg shadow-emerald-400/50">
+          {Icon && <Icon size={20} className="text-black" />}
+      </motion.div>
 
-    {/* Círculo del punto de la línea de tiempo */}
-    <motion.div
-      initial={{ scale: 0, rotate: -180 }}
-      whileInView={{ scale: 1, rotate: 0 }}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.2 + 0.1,
-        type: "spring",
-        stiffness: 200,
-        damping: 10
-      }}
-      viewport={{ once: true }}
-      whileHover={{ scale: 1.2, rotate: 360 }}
-      className="h-10 w-10 min-w-10 rounded-full bg-emerald-400 flex items-center justify-center absolute left-0 top-0 z-10 border-4 border-black shadow-lg shadow-emerald-400/50">
-        {Icon && <Icon size={20} className="text-black" />}
-    </motion.div>
-
-    {/* Contenido */}
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.2 + 0.4 }}
-      viewport={{ once: true }}
-      className="ml-16 pb-12 pt-0.5">
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.3, delay: index * 0.2 + 0.5 }}
+      {/* Contenido */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: index * 0.2 + 0.4 }}
         viewport={{ once: true }}
-        className="text-sm text-emerald-400 font-mono mb-1 font-semibold">
-        {year}
-      </motion.p>
-      <h3 className="text-xl font-bold text-white mb-1">{title}</h3>
-      <p className="text-gray-400 font-medium mb-3">{subtitle}</p>
-      <p className="text-gray-400 text-base leading-relaxed">{description}</p>
+        className="ml-16 pb-12 pt-0.5">
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: index * 0.2 + 0.5 }}
+          viewport={{ once: true }}
+          className="text-sm text-emerald-400 font-mono mb-1 font-semibold">
+          {year}
+        </motion.p>
+        <h3 className="text-xl font-bold text-white mb-1">{title}</h3>
+        <p className="text-gray-400 font-medium mb-3">{subtitle}</p>
+
+        {showDescription && (
+          <>
+            <motion.div
+              initial={false}
+              animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden">
+              <p className="text-gray-400 text-base leading-relaxed mb-3">{description}</p>
+            </motion.div>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
+              {isExpanded ? 'Ocultar descripción' : 'Ver descripción'}
+              <motion.svg
+                animate={{ rotate: isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </motion.svg>
+            </motion.button>
+          </>
+        )}
+      </motion.div>
     </motion.div>
-  </motion.div>
-);
+  );
+};
 
 
 const Portfolio = () => {
@@ -128,15 +160,18 @@ const Portfolio = () => {
 
   // Datos de Educación y Experiencia
   const educationData = [
-    { year: '2023 - 2024', title: 'Maestría en Arquitectura Cloud', subtitle: 'Universidad Tecnológica de XYZ', description: 'Especialización en arquitecturas serverless, contenedores (Docker/Kubernetes) y desarrollo de microservicios en AWS.' },
-    { year: '2016 - 2020', title: 'Ingeniería de Sistemas', subtitle: 'Universidad Nacional de Ingeniería', description: 'Enfoque en algoritmos, estructuras de datos y desarrollo de software. Tesis en optimización de bases de datos.' },
-    { year: '2010 - 2012', title: 'Técnico en Programación', subtitle: 'Instituto Superior de Tecnología', description: 'Formación inicial en lenguajes como C++ y Java, y bases de datos SQL.' },
+    { year: '2022 - 2024', title: 'Maestría en Administración de Proyectos', subtitle: 'Universidad Tecnológica Centroamericana (UNITEC)', description: 'Programa acreditado por el Global Accreditation Center (GAC) del Project Management Institute (PMI), una de solo 5 universidades latinoamericanas con esta distinción. Formación profesional en planificación, dirección y evaluación de proyectos aplicando estándares internacionales de calidad (PMI, SCRUM). Competencias adquiridas: gestión de riesgos, adquisiciones, recursos humanos, comunicaciones, calidad, evaluación de impacto social y ambiental, metodologías ágiles (Certificación SCRUM Master), análisis de negocios y preparación para certificación PMP. Incluye membresía al PMI y acceso a intercambios académicos internacionales.' },
+    { year: '2011 - 2015', title: 'Ingeniería en Sistemas', subtitle: 'Universidad Nacional Autónoma de Honduras (UNAH)', description: 'Formación integral en desarrollo de software, arquitectura de sistemas, bases de datos y gestión de proyectos tecnológicos.' },
+    { year: '2008 - 2010', title: 'Técnico en Computación', subtitle: 'Instituto Técnico Honduras', description: 'Fundamentos de programación, redes, hardware y mantenimiento de sistemas informáticos.' },
   ];
 
   const experienceData = [
-    { year: '2020 - Actualidad', title: 'Senior Fullstack Developer', subtitle: 'TechSolutions Inc.', description: 'Liderando el desarrollo de la plataforma principal SaaS, implementando Next.js para el frontend y Go/Node.js para los microservicios de backend. Mentoría de equipos junior.' },
-    { year: '2018 - 2020', title: 'Junior Backend Developer', subtitle: 'Digital Agency Co.', description: 'Desarrollo y mantenimiento de APIs RESTful utilizando Express.js y MongoDB para múltiples clientes. Responsable de la integración de pasarelas de pago.' },
-    { year: '2016 - 2018', title: 'Desarrollador Frontend', subtitle: 'Startup Innova', description: 'Construcción de interfaces de usuario interactivas con React y Redux. Implementación de diseños responsivos con CSS puro y posteriormente con Tailwind CSS.' },
+    { year: '2021 - 2025', title: 'Consultant - Lead Technology Architect & Digital Solutions Specialist', subtitle: 'BID / Programa Ciudad Mujer', description: 'Desarrollo e implementación del ecosistema digital: plataformas INNOVA MUJER, INNOVA Tech Mujer, Conocimiento, Conecta e integración con SIRM. Stack: Python, JavaScript, PostgreSQL, MySQL, Nginx. Infraestructura: Linux/Windows, redes Fortinet y Cisco.' },
+    { year: '2022 - 2025', title: 'Freelance - Web Developer & Infrastructure Engineer', subtitle: 'Centro de Estudios de la Mujer (CEM-H)', description: 'Desarrollo de funcionalidades web institucionales y gestión de infraestructura. Stack: WordPress, PHP, Python, JavaScript, MySQL. Infraestructura: Linux/Windows, redes Fortinet/Cisco, Git/GitHub.' },
+    { year: '2020 - 2021', title: 'Consultant - Senior Systems Analyst & Technical Advisor', subtitle: 'Banco Interamericano de Desarrollo (BID)', description: 'Diagnóstico técnico y automatización de procesos operativos. Stack: Python, JavaScript, PostgreSQL. Infraestructura: Linux, Nginx, redes Fortinet/Cisco.' },
+    { year: '2019 - 2020', title: 'Consultant - Full-Stack Developer & Mobile Solutions Architect', subtitle: 'USAID/GIZ - Secretaría de Derechos Humanos', description: 'Implementación de plataformas web (ODH, SIPNADH) y aplicaciones móviles de recolección de datos. Stack: Python, JavaScript, PostgreSQL, Nginx. Infraestructura: Linux, seguridad de red.' },
+    { year: '2018 - 2019', title: 'Freelance - Full-Stack Developer & Cloud DevOps Engineer', subtitle: 'Fundación GLANF', description: 'Desarrollo de sistema administrativo y app móvil Android para seguimiento de proyectos. Stack: PHP, Java, SQLite, MySQL. Infraestructura: AWS, Linux.' },
+    { year: '2016 - 2018', title: 'Consultant - Software Developer & Government Systems Architect', subtitle: 'MiAmbiente Honduras (PNUD)', description: 'Desarrollo de plataformas gubernamentales: SINIA, CESCCO, RETC, OCP. Stack: Python, JavaScript, PHP, MySQL. Infraestructura: Linux, redes Cisco.' },
   ];
 
   // Smooth scroll handler with slower scroll
@@ -968,6 +1003,7 @@ const Portfolio = () => {
                         isLast={idx === educationData.length - 1}
                         icon={GraduationCap}
                         index={idx}
+                        showDescription={true}
                       />
                     ))}
                 </div>
@@ -1003,6 +1039,7 @@ const Portfolio = () => {
                         isLast={idx === experienceData.length - 1}
                         icon={Briefcase}
                         index={idx}
+                        showDescription={true}
                       />
                     ))}
                 </div>
@@ -1094,39 +1131,127 @@ const Portfolio = () => {
           </motion.a>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
             {
-              title: "Sistema de Gestión Empresarial",
-              cat: "React • Node.js • PostgreSQL",
-              type: "Cliente Confidencial",
-              impact: "Reducción del 40% en tiempo de procesamiento",
-              role: "Lead Fullstack Developer",
-              confidential: true
+              title: "Plataforma INNOVA MUJER & SIRM",
+              cat: "Python • JavaScript • PostgreSQL • Linux",
+              type: "BID - Programa Ciudad Mujer",
+              year: "2021 - 2025",
+              impact: "Ecosistema digital integrado para 50K+ usuarias",
+              role: "Consultor Especialista en Tecnología",
+              confidential: false,
+              url: ""
             },
             {
-              title: "Plataforma de E-Commerce B2B",
-              cat: "Next.js • Python • AWS",
-              type: "Retail - Fortune 500",
+              title: "Observatorio de Derechos Humanos (ODH)",
+              cat: "Python • JavaScript • PostgreSQL • Nginx",
+              type: "SEDH - USAID/DAI",
+              year: "2019 - 2020",
+              impact: "Plataforma de visualización y recolección de datos nacional",
+              role: "Arquitecto de Soluciones Full-Stack",
+              confidential: false,
+              url: "https://odh.sedh.gob.hn"
+            },
+            {
+              title: "SIPNADH - Sistema de Políticas Públicas",
+              cat: "Python • JavaScript • PostgreSQL • Linux",
+              type: "SEDH - GIZ",
+              year: "2019",
+              impact: "Gestión digital de Plan Nacional de Acción en DDHH",
+              role: "Lead Developer",
+              confidential: false,
+              url: "https://sipnadh.sedh.gob.hn/"
+            },
+            {
+              title: "Sistema de Gestión Empresarial ERP",
+              cat: "React • Node.js • PostgreSQL • Docker",
+              type: "Cliente Confidencial - Sector Retail",
+              year: "2023",
+              impact: "Reducción del 40% en tiempo de procesamiento operativo",
+              role: "Lead Fullstack Developer",
+              confidential: true,
+              url: ""
+            },
+            {
+              title: "Sistema Nacional de Información Ambiental",
+              cat: "Python • JavaScript • MySQL • Linux",
+              type: "MiAmbiente - PNUD",
+              year: "2016 - 2018",
+              impact: "Portal gubernamental con 10+ módulos integrados",
+              role: "Consultor en Desarrollo e Implementación",
+              confidential: false,
+              url: "http://www.miambiente.gob.hn"
+            },
+            {
+              title: "RETC - Registro de Emisiones y Transferencias",
+              cat: "Python • JavaScript • MySQL • Nginx",
+              type: "MiAmbiente/CESCCO - PNUD",
+              year: "2016 - 2018",
+              impact: "Sistema nacional de monitoreo de contaminantes",
+              role: "Diseñador Web & Desarrollador",
+              confidential: false,
+              url: "http://www.retchn.org/"
+            },
+            {
+              title: "Plataforma E-Commerce B2B",
+              cat: "Next.js • Python • AWS • Stripe",
+              type: "Cliente Confidencial - Fortune 500",
+              year: "2022",
               impact: "100K+ transacciones mensuales procesadas",
               role: "Backend Architect",
-              confidential: true
+              confidential: true,
+              url: ""
             },
             {
-              title: "App Móvil de Logística",
-              cat: "React Native • Django • PostgreSQL",
-              type: "Industria Logística",
-              impact: "50+ vehículos monitoreados en tiempo real",
-              role: "Mobile Lead Developer",
-              confidential: true
+              title: "Sistema de Punto de Venta & Contabilidad",
+              cat: "PHP • Python • PostgreSQL • MySQL • AWS",
+              type: "Grupo Tecnológico CROP",
+              year: "2020",
+              impact: "Suite empresarial con inventario y reportería avanzada",
+              role: "Fullstack Developer",
+              confidential: true,
+              url: ""
+            },
+            {
+              title: "App Móvil de Seguimiento de Proyectos",
+              cat: "Java • SQLite • MySQL • AWS",
+              type: "Fundación GLANF",
+              year: "2018 - 2019",
+              impact: "Control en campo de proyectos sociales con sincronización offline",
+              role: "Desarrollador Android Full-Stack",
+              confidential: false,
+              url: ""
+            },
+            {
+              title: "Plataforma de Encuestas sobre Cambio Climático",
+              cat: "Python • JavaScript • MySQL • Linux",
+              type: "MiAmbiente/SINIA",
+              year: "2016 - 2018",
+              impact: "Recolección de datos nacionales sobre sostenibilidad",
+              role: "Desarrollador Full-Stack",
+              confidential: false,
+              url: "http://encuestas.miambiente.gob.hn/"
             },
             {
               title: "Sistema de Inventario IoT",
               cat: "Angular • Python • MongoDB • AWS IoT",
-              type: "Manufactura",
+              type: "Cliente Confidencial - Manufactura",
+              year: "2021",
               impact: "500+ sensores integrados, 99.9% uptime",
               role: "Fullstack Developer",
-              confidential: true
+              confidential: true,
+              url: ""
+            },
+            {
+              title: "App Móvil de Logística en Tiempo Real",
+              cat: "React Native • Django • PostgreSQL",
+              type: "Cliente Confidencial - Logística",
+              year: "2020",
+              impact: "50+ vehículos monitoreados, reducción 30% en tiempos",
+              role: "Mobile Lead Developer",
+              confidential: true,
+              url: ""
             }
           ].map((project, idx) => (
             <motion.div
@@ -1144,12 +1269,15 @@ const Portfolio = () => {
               {/* Header with confidential badge */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-2 group-hover:text-emerald-500 transition-colors">{project.title}</h3>
-                  <p className={`text-sm font-semibold mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{project.type}</p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-xl font-bold group-hover:text-emerald-500 transition-colors">{project.title}</h3>
+                  </div>
+                  <p className={`text-xs font-semibold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>{project.type}</p>
+                  <p className={`text-xs font-mono font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>{project.year}</p>
                 </div>
                 {project.confidential && (
-                  <div className="flex items-center gap-1 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
-                    <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                  <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
+                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
                     <span className="text-emerald-500 text-xs font-bold uppercase">NDA</span>
                   </div>
                 )}
@@ -1172,10 +1300,26 @@ const Portfolio = () => {
                 <p className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{project.impact}</p>
               </div>
 
-              {/* Footer note */}
-              <div className={`mt-4 pt-4 border-t text-xs italic ${isDark ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-500'}`}>
-                Código fuente bajo acuerdo de confidencialidad con el cliente
-              </div>
+              {/* Footer note or link */}
+              {project.confidential ? (
+                <div className={`mt-4 pt-4 border-t text-xs italic ${isDark ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-500'}`}>
+                  Código fuente bajo acuerdo de confidencialidad con el cliente
+                </div>
+              ) : project.url ? (
+                <div className="mt-4 pt-4 border-t">
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">
+                    Ver Proyecto en Vivo <ExternalLink size={14} />
+                  </a>
+                </div>
+              ) : (
+                <div className={`mt-4 pt-4 border-t text-xs ${isDark ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-500'}`}>
+                  Proyecto implementado y en producción
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
