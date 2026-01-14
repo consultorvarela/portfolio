@@ -18,9 +18,8 @@ export const Footer = () => {
           © {new Date().getFullYear()} Pedro Varela. Todos los derechos reservados.
         </div>
 
-        <div className="flex gap-6">
-          <a href="#" className="hover:text-emerald-400 transition-colors">Política de Privacidad</a>
-          <a href="#" className="hover:text-emerald-400 transition-colors">Términos de Servicio</a>
+        <div className="flex gap-6 text-sm">
+          <span className="text-gray-600">Hecho con React + Tailwind CSS</span>
         </div>
       </div>
     </footer>

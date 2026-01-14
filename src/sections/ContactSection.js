@@ -33,7 +33,7 @@ export const ContactSection = () => {
               </div>
               <div>
                 <p className="text-gray-400 text-sm">Envíame un Email</p>
-                <p className="text-xl font-bold">consultorvarela@gmail.com</p>
+                <a href="mailto:consultorvarela@gmail.com" className="text-xl font-bold hover:text-emerald-400 transition-colors">consultorvarela@gmail.com</a>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -42,7 +42,7 @@ export const ContactSection = () => {
               </div>
               <div>
                 <p className="text-gray-400 text-sm">Revisa mi Código</p>
-                <p className="text-xl font-bold">github.com/consultorvarela</p>
+                <a href="https://github.com/consultorvarela" target="_blank" rel="noopener noreferrer" className="text-xl font-bold hover:text-emerald-400 transition-colors">github.com/consultorvarela</a>
               </div>
             </div>
             <div className="flex items-center gap-4">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Download, Github, Globe, Linkedin, ArrowDown, Code } from 'lucide-react';
+import { ArrowUpRight, Github, Globe, Linkedin, ArrowDown, Code } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
 import Particles3D from '../Particles3D';
 import { TypewriterText } from '../components/ui/TypewriterText';
@@ -44,7 +44,7 @@ export const HeroSection = ({ scrollToSection }) => {
             <span className="block lg:inline">Desarrollador Fullstack</span>
             <br className="hidden lg:block" />
             <span className="block lg:inline">Con base en </span>
-            <span className="text-emerald-500/90 text-black">Honduras</span>
+            <span className="text-emerald-500">Honduras</span>
           </h1>
 
           <p className="text-gray-500 text-base md:text-lg lg:text-xl max-w-lg mx-auto lg:mx-0 leading-relaxed">
@@ -74,21 +74,25 @@ export const HeroSection = ({ scrollToSection }) => {
               <motion.a
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                href="#"
+                href="https://github.com/consultorvarela"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${isDark ? 'border-gray-600 hover:bg-white hover:text-black hover:border-white' : 'border-gray-300 hover:bg-black hover:text-white hover:border-black'}`}>
                 <Github size={18} />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                href="#"
+                href="https://www.consultorvarela.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${isDark ? 'border-gray-600 hover:bg-white hover:text-black hover:border-white' : 'border-gray-300 hover:bg-black hover:text-white hover:border-black'}`}>
                 <Globe size={18} />
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                href="#"
+                href="https://www.linkedin.com/in/consultorvarela/"
                 className="w-10 h-10 rounded-full bg-emerald-400 border border-emerald-400 text-white flex items-center justify-center hover:bg-emerald-500 transition-all">
                 <Linkedin size={18} />
               </motion.a>

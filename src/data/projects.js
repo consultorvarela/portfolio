@@ -60,16 +60,6 @@ export const projectsData = [
     url: "http://www.retchn.org/"
   },
   {
-    title: "Plataforma E-Commerce B2B",
-    cat: "Next.js • Python • AWS • Stripe",
-    type: "Cliente Confidencial - Fortune 500",
-    year: "2022",
-    impact: "100K+ transacciones mensuales procesadas",
-    role: "Backend Architect",
-    confidential: true,
-    url: ""
-  },
-  {
     title: "Sistema de Punto de Venta & Contabilidad",
     cat: "PHP • Python • PostgreSQL • MySQL • AWS",
     type: "Grupo Tecnológico CROP",

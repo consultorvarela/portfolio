@@ -24,7 +24,7 @@ export const ProjectsSection = () => {
           </p>
         </div>
         <motion.a
-          href="https://github.com/pedrovarela"
+          href="https://github.com/consultorvarela"
           target="_blank"
           rel="noopener noreferrer"
           whileHover={{ scale: 1.05 }}

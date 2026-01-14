@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
-export const SEO = ({ 
+export const SEO = ({
   title = "Pedro Varela - Desarrollador Fullstack | React, Python, Node.js",
-  description = "Portafolio de Pedro Varela, desarrollador fullstack especializado en React, Python, Node.js y AWS. 10+ proyectos en producción, 5+ años de experiencia.",
+  description = "Portafolio de Pedro Varela, desarrollador fullstack especializado en React, Python, Node.js y AWS. 10+ proyectos en producción, 8+ años de experiencia.",
   keywords = "desarrollador fullstack, react developer, python developer, nodejs, aws, desarrollador web, programador honduras, fullstack engineer, web development",
   author = "Pedro Varela",
   image = "/og-image.jpg",
-  url = "https://pedrovarela.io",
+  url = "https://www.consultorvarela.com/",
   type = "website"
 }) => {
   useEffect(() => {
@@ -32,9 +32,18 @@ export const SEO = ({
     updateMetaTag('description', description);
     updateMetaTag('keywords', keywords);
     updateMetaTag('author', author);
-    updateMetaTag('robots', 'index, follow');
+    updateMetaTag('robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
     updateMetaTag('language', 'Spanish');
     updateMetaTag('revisit-after', '7 days');
+    updateMetaTag('googlebot', 'index, follow');
+    updateMetaTag('bingbot', 'index, follow');
+    updateMetaTag('rating', 'general');
+    updateMetaTag('distribution', 'global');
+    updateMetaTag('HandheldFriendly', 'True');
+    updateMetaTag('MobileOptimized', '320');
+    updateMetaTag('geo.region', 'HN');
+    updateMetaTag('geo.placename', 'Honduras');
+    updateMetaTag('coverage', 'Worldwide');
 
     // Open Graph / Facebook
     updateMetaTag('og:type', type, true);
@@ -51,7 +60,7 @@ export const SEO = ({
     updateMetaTag('twitter:title', title, true);
     updateMetaTag('twitter:description', description, true);
     updateMetaTag('twitter:image', image, true);
-    updateMetaTag('twitter:creator', '@pedrovarela', true);
+    updateMetaTag('twitter:creator', '@consultorvarela', true);
 
     // Additional SEO
     updateMetaTag('theme-color', '#10b981');
@@ -79,28 +88,59 @@ export const SEO = ({
       "@type": "Person",
       "name": "Pedro Varela",
       "url": url,
-      "image": image,
+      "image": "https://www.consultorvarela.com/img/herovarela.png",
       "jobTitle": "Desarrollador Fullstack",
+      "description": "Desarrollador fullstack especializado en React, Python, Node.js y AWS con 8+ años de experiencia en proyectos gubernamentales y empresariales",
+      "email": "consultorvarela@gmail.com",
       "worksFor": {
         "@type": "Organization",
-        "name": "Freelance"
+        "name": "Consultor Independiente"
       },
       "address": {
         "@type": "PostalAddress",
-        "addressCountry": "Honduras"
+        "addressCountry": "HN",
+        "addressRegion": "Honduras"
       },
       "sameAs": [
-        "https://github.com/pedrovarela",
-        "https://linkedin.com/in/pedrovarela"
+        "https://github.com/consultorvarela",
+        "https://www.linkedin.com/in/consultorvarela/",
+        "https://www.consultorvarela.com/"
       ],
       "knowsAbout": [
         "React",
+        "Next.js",
         "Python",
+        "Django",
+        "Flask",
         "Node.js",
+        "Express",
         "AWS",
+        "PostgreSQL",
+        "MongoDB",
+        "Docker",
         "Full Stack Development",
-        "Web Development"
-      ]
+        "Web Development",
+        "Mobile Development",
+        "React Native",
+        "TypeScript",
+        "JavaScript",
+        "Tailwind CSS"
+      ],
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Universidad Nacional Autónoma de Honduras"
+      },
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "Certification",
+          "name": "AWS Certified Developer"
+        }
+      ],
+      "seeks": {
+        "@type": "Demand",
+        "name": "Oportunidades de desarrollo fullstack y consultoría tecnológica"
+      }
     };
 
     scriptTag.textContent = JSON.stringify(structuredData);

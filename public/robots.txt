@@ -3,4 +3,4 @@ User-agent: *
 Disallow:
 Allow: /
 
-Sitemap: https://pedrovarela.io/sitemap.xml
+Sitemap: https://www.consultorvarela.com/sitemap.xml

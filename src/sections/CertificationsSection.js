@@ -86,11 +86,11 @@ export const CertificationsSection = () => {
             <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Certificaciones</p>
           </div>
           <div>
-            <p className="text-4xl font-bold text-emerald-500 mb-2">5+</p>
+            <p className="text-4xl font-bold text-emerald-500 mb-2">10+</p>
             <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Años Experiencia</p>
           </div>
           <div>
-            <p className="text-4xl font-bold text-emerald-500 mb-2">50+</p>
+            <p className="text-4xl font-bold text-emerald-500 mb-2">10+</p>
             <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Proyectos Completados</p>
           </div>
           <div>
