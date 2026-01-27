@@ -1,33 +1,36 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X, Sun, Moon, Github, Globe, Linkedin } from 'lucide-react';
+import { Menu, X, Sun, Moon, Github, Globe, Linkedin, BookOpen } from 'lucide-react';
 import { useTheme } from '../../ThemeContext';
 
 export const Navbar = ({ activeSection, scrollToSection }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isDark, toggleTheme } = useTheme();
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   const menuItems = ['Inicio', 'Acerca', 'Habilidades', 'Experiencia', 'Proyectos', 'Contacto'];
   const menuIds = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 py-6 px-6 md:px-12 flex justify-between items-center transition-all duration-300 border-b ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'}`}>
-      <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollToSection('home')}>
+      <Link to="/" className="flex items-center gap-2 cursor-pointer" onClick={() => isHomePage && scrollToSection && scrollToSection('home')}>
         <div className="w-8 h-8 rounded-full bg-emerald-400 flex items-center justify-center">
           <span className="text-white font-bold text-lg italic">P</span>
         </div>
         <span className="font-bold text-xl tracking-tight">Pedro</span>
-      </div>
+      </Link>
 
       {/* Desktop Menu */}
       <div className={`hidden md:flex items-center gap-8 font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-        {menuItems.map((item, index) => {
+        {isHomePage && menuItems.map((item, index) => {
           const id = menuIds[index];
           const isActive = activeSection === id;
           return (
             <button
               key={item}
-              onClick={() => scrollToSection(id)}
+              onClick={() => scrollToSection && scrollToSection(id)}
               className={`flex items-center gap-2 transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black'} ${isActive ? (isDark ? 'text-white font-semibold' : 'text-black font-semibold') : ''}`}
             >
               {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>}
@@ -35,6 +38,16 @@ export const Navbar = ({ activeSection, scrollToSection }) => {
             </button>
           );
         })}
+
+        {/* Blog Link */}
+        <Link
+          to="/blog"
+          className={`flex items-center gap-2 transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black'} ${location.pathname.startsWith('/blog') ? (isDark ? 'text-white font-semibold' : 'text-black font-semibold') : ''}`}
+        >
+          {location.pathname.startsWith('/blog') && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>}
+          <BookOpen size={16} />
+          Blog
+        </Link>
 
         {/* Theme Toggle */}
         <motion.button
@@ -99,7 +112,7 @@ export const Navbar = ({ activeSection, scrollToSection }) => {
 
           {/* Links del menú */}
           <div className="flex-1 flex flex-col justify-center px-8 py-12 gap-2">
-            {menuItems.map((item, index) => {
+            {isHomePage && menuItems.map((item, index) => {
               const id = menuIds[index];
               const isActive = activeSection === id;
 
@@ -110,7 +123,7 @@ export const Navbar = ({ activeSection, scrollToSection }) => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   onClick={() => {
-                    scrollToSection(id);
+                    scrollToSection && scrollToSection(id);
                     setIsMenuOpen(false);
                   }}
                   className={`text-left py-4 font-bold text-3xl border-b transition-colors ${
@@ -128,6 +141,48 @@ export const Navbar = ({ activeSection, scrollToSection }) => {
                 </motion.button>
               );
             })}
+
+            {/* Link al Blog */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: isHomePage ? menuItems.length * 0.1 : 0.1 }}
+            >
+              <Link
+                to="/blog"
+                onClick={() => setIsMenuOpen(false)}
+                className={`flex items-center gap-3 text-left py-4 font-bold text-3xl border-b transition-colors ${
+                  isDark ? 'border-gray-800' : 'border-gray-100'
+                } ${
+                  location.pathname.startsWith('/blog')
+                    ? 'text-emerald-400'
+                    : isDark ? 'text-white hover:text-emerald-400' : 'text-gray-900 hover:text-emerald-500'
+                }`}
+              >
+                {location.pathname.startsWith('/blog') && <span className="w-2 h-2 rounded-full bg-emerald-400"></span>}
+                <BookOpen size={24} />
+                Blog
+              </Link>
+            </motion.div>
+
+            {/* Link al Inicio cuando no estás en home */}
+            {!isHomePage && (
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0 }}
+              >
+                <Link
+                  to="/"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`flex items-center gap-3 text-left py-4 font-bold text-3xl border-b transition-colors ${
+                    isDark ? 'border-gray-800' : 'border-gray-100'
+                  } ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-900 hover:text-emerald-500'}`}
+                >
+                  Inicio
+                </Link>
+              </motion.div>
+            )}
           </div>
 
           {/* Footer del menú móvil */}

@@ -105,7 +105,7 @@ export const HeroSection = ({ scrollToSection }) => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full flex items-center justify-center lg:justify-end order-1 lg:order-2">
+          className="relative h-[280px] md:h-[500px] lg:h-[600px] w-full flex items-center justify-center lg:justify-end order-1 lg:order-2">
            {/* Abstract Shapes */}
           <motion.div
             animate={{ y: [0, -20, 0] }}

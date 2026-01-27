@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTheme } from './ThemeContext';
-import CustomCursor from './CustomCursor';
 import SEO from './components/common/SEO';
 import Navbar from './components/navigation/Navbar';
 import HeroSection from './sections/HeroSection';
@@ -25,7 +24,6 @@ const Portfolio = () => {
   return (
     <>
       <SEO />
-      <CustomCursor />
       <div className={`min-h-screen font-sans selection:bg-emerald-400 selection:text-white transition-colors duration-300 ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-slate-900'}`}>
         <Navbar 
           activeSection={activeSection} 
