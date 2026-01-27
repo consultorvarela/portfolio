@@ -15,7 +15,123 @@ export const HeroSection = ({ scrollToSection }) => {
         <Particles3D />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 max-w-7xl mx-auto">
+      {/* ============ LAYOUT MÓVIL ============ */}
+      <div className="md:hidden relative z-10 max-w-7xl mx-auto">
+        {/* Header compacto: Foto circular + Título */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center gap-4 mb-6"
+        >
+          {/* Foto circular */}
+          <div className="relative flex-shrink-0">
+            <div className="w-20 h-20 rounded-full overflow-hidden border-3 border-emerald-400 shadow-lg">
+              <img
+                src="./img/herovarela.png"
+                alt="Pedro Varela"
+                className="w-full h-full object-cover object-top"
+              />
+            </div>
+            {/* Punto verde de estado */}
+            <div className="absolute bottom-1 right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-white"></div>
+          </div>
+
+          {/* Título */}
+          <div>
+            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Pedro Varela</p>
+            <h1 className="text-xl font-extrabold leading-tight">
+              Desarrollador Fullstack
+            </h1>
+            <p className="text-sm">
+              Con base en <span className="text-emerald-500 font-bold">Honduras</span>
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Console.log badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mb-6"
+        >
+          <div className={`border-2 border-emerald-400 px-3 py-2 rounded-sm relative inline-block ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`absolute -top-1.5 -left-1.5 w-2 h-2 bg-emerald-400 border ${isDark ? 'border-gray-800' : 'border-white'}`}></div>
+            <div className={`absolute -top-1.5 -right-1.5 w-2 h-2 bg-emerald-400 border ${isDark ? 'border-gray-800' : 'border-white'}`}></div>
+            <div className={`absolute -bottom-1.5 -left-1.5 w-2 h-2 bg-emerald-400 border ${isDark ? 'border-gray-800' : 'border-white'}`}></div>
+            <div className={`absolute -bottom-1.5 -right-1.5 w-2 h-2 bg-emerald-400 border ${isDark ? 'border-gray-800' : 'border-white'}`}></div>
+            <span className="font-bold text-xs font-mono">
+              <TypewriterText text={`console.log("Hello World! I'm Pedro Varela")`} delay={200} />
+            </span>
+          </div>
+        </motion.div>
+
+        {/* Descripción */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-gray-500 text-base leading-relaxed mb-6"
+        >
+          Transformo ideas en soluciones digitales escalables. Especializado en crear aplicaciones web de alto rendimiento con arquitecturas backend sólidas y experiencias frontend intuitivas.
+        </motion.p>
+
+        {/* Botón */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mb-6"
+        >
+          <button onClick={() => scrollToSection('contact')} className="relative group w-full">
+            <div className="absolute inset-0 bg-emerald-400 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
+            <div className="relative bg-black text-white px-6 py-3 font-bold flex items-center justify-center gap-2 border-2 border-transparent transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5 text-sm">
+              Contrátame <ArrowUpRight size={18} />
+            </div>
+          </button>
+        </motion.div>
+
+        {/* Redes sociales */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="flex items-center justify-center gap-4"
+        >
+          <span className={`text-xs font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Sígueme:</span>
+          <div className="flex gap-3">
+            <motion.a
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              href="https://github.com/consultorvarela"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${isDark ? 'border-gray-600 hover:bg-white hover:text-black hover:border-white' : 'border-gray-300 hover:bg-black hover:text-white hover:border-black'}`}>
+              <Github size={18} />
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              href="https://www.consultorvarela.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${isDark ? 'border-gray-600 hover:bg-white hover:text-black hover:border-white' : 'border-gray-300 hover:bg-black hover:text-white hover:border-black'}`}>
+              <Globe size={18} />
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              href="https://www.linkedin.com/in/consultorvarela/"
+              className="w-10 h-10 rounded-full bg-emerald-400 border border-emerald-400 text-white flex items-center justify-center hover:bg-emerald-500 transition-all">
+              <Linkedin size={18} />
+            </motion.a>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* ============ LAYOUT DESKTOP (sin cambios) ============ */}
+      <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 max-w-7xl mx-auto">
 
         {/* Left Content */}
         <motion.div
@@ -58,14 +174,6 @@ export const HeroSection = ({ scrollToSection }) => {
                 Contrátame <ArrowUpRight size={18} className="md:w-5 md:h-5" />
               </div>
             </button>
-
-            {/* CV Download Button - Commented out for now */}
-            {/* <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 font-bold border-2 transition-colors text-sm md:text-base ${isDark ? 'border-gray-600 hover:border-emerald-400 bg-gray-800 text-white' : 'border-gray-200 hover:border-black bg-white'}`}>
-              CV <Download size={18} className="md:w-5 md:h-5" />
-            </motion.button> */}
           </div>
 
           <div className="flex items-center justify-center lg:justify-start gap-4 pt-4">
@@ -105,7 +213,7 @@ export const HeroSection = ({ scrollToSection }) => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative h-[280px] md:h-[500px] lg:h-[600px] w-full flex items-center justify-center lg:justify-end order-1 lg:order-2">
+          className="relative h-[500px] lg:h-[600px] w-full flex items-center justify-center lg:justify-end order-1 lg:order-2">
            {/* Abstract Shapes */}
           <motion.div
             animate={{ y: [0, -20, 0] }}
@@ -120,16 +228,15 @@ export const HeroSection = ({ scrollToSection }) => {
 
           {/* Photo Frame */}
           <div className="relative z-10 w-full max-w-md bg-gray-100 h-full max-h-[550px] overflow-hidden shadow-2xl border-4 border-black">
-            {/* Developer stock image */}
             <img
               src="./img/herovarela.png"
               alt="Pedro Varela"
               className="w-full h-full object-cover object-left grayscale hover:grayscale-0 transition-all duration-500"
             />
           </div>
-          
+
           {/* Floating Circular Badge */}
-          <div className="absolute bottom-20 -left-10 md:left-10 z-20 bg-white rounded-full p-6 shadow-xl border border-gray-100 hidden md:flex items-center justify-center animate-spin-slow">
+          <div className="absolute bottom-20 left-10 z-20 bg-white rounded-full p-6 shadow-xl border border-gray-100 flex items-center justify-center animate-spin-slow">
              <svg viewBox="0 0 100 100" width="100" height="100">
               <defs>
                 <path id="circle" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" />

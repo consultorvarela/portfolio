@@ -249,8 +249,8 @@ const BlogPostPage = () => {
                 </span>
               </div>
 
-              {/* Botón de lectura */}
-              <div className="flex items-center gap-2 mt-4">
+              {/* Botón de lectura - Solo visible en desktop */}
+              <div className="hidden md:flex items-center gap-2 mt-4">
                 <button
                   onClick={handleSpeech}
                   className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all ${
@@ -277,8 +277,8 @@ const BlogPostPage = () => {
               </div>
             </motion.header>
 
-            {/* Botón flotante de audio */}
-            <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2">
+            {/* Botón flotante de audio - Solo visible en desktop */}
+            <div className="fixed bottom-6 right-6 z-50 hidden md:flex items-center gap-2">
               {speechState !== 'idle' && (
                 <motion.button
                   initial={{ scale: 0, opacity: 0 }}
