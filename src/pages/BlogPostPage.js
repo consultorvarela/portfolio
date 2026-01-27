@@ -3,6 +3,7 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, ArrowLeft, Share2, Linkedin, Twitter, Volume2, VolumeX, Pause } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { useLanguage } from '../LanguageContext';
 import { getPostBySlug } from '../data/blogPosts';
 import Navbar from '../components/navigation/Navbar';
 import Footer from '../sections/Footer';
@@ -11,6 +12,7 @@ import SEO from '../components/common/SEO';
 const BlogPostPage = () => {
   const { slug } = useParams();
   const { isDark } = useTheme();
+  const { language } = useLanguage();
   const post = getPostBySlug(slug);
   const [speechState, setSpeechState] = useState('idle'); // idle, playing, paused
 
@@ -206,7 +208,7 @@ const BlogPostPage = () => {
               className={`inline-flex items-center gap-2 mb-8 text-sm font-medium hover:text-emerald-500 transition-colors ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
             >
               <ArrowLeft size={16} />
-              Volver al blog
+              {language === 'es' ? 'Volver al blog' : 'Back to blog'}
             </Link>
 
             {/* Header */}
@@ -237,7 +239,7 @@ const BlogPostPage = () => {
               <div className={`flex flex-wrap items-center gap-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 <span className="flex items-center gap-1">
                   <Calendar size={16} />
-                  {new Date(post.date).toLocaleDateString('es-ES', {
+                  {new Date(post.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
@@ -245,7 +247,7 @@ const BlogPostPage = () => {
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock size={16} />
-                  {post.readTime} de lectura
+                  {post.readTime} {language === 'es' ? 'de lectura' : 'read'}
                 </span>
               </div>
 
@@ -261,15 +263,15 @@ const BlogPostPage = () => {
                         : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                   }`}
                 >
-                  {speechState === 'idle' && <><Volume2 size={16} /> Escuchar artículo</>}
-                  {speechState === 'playing' && <><Pause size={16} /> Pausar</>}
-                  {speechState === 'paused' && <><Volume2 size={16} /> Continuar</>}
+                  {speechState === 'idle' && <><Volume2 size={16} /> {language === 'es' ? 'Escuchar artículo' : 'Listen to article'}</>}
+                  {speechState === 'playing' && <><Pause size={16} /> {language === 'es' ? 'Pausar' : 'Pause'}</>}
+                  {speechState === 'paused' && <><Volume2 size={16} /> {language === 'es' ? 'Continuar' : 'Continue'}</>}
                 </button>
                 {speechState !== 'idle' && (
                   <button
                     onClick={stopSpeech}
                     className={`p-2 rounded-full transition-colors ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
-                    aria-label="Detener lectura"
+                    aria-label={language === 'es' ? 'Detener lectura' : 'Stop reading'}
                   >
                     <VolumeX size={16} className="text-red-500" />
                   </button>
@@ -286,7 +288,7 @@ const BlogPostPage = () => {
                   exit={{ scale: 0, opacity: 0 }}
                   onClick={stopSpeech}
                   className="w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
-                  aria-label="Detener lectura"
+                  aria-label={language === 'es' ? 'Detener lectura' : 'Stop reading'}
                 >
                   <VolumeX size={18} />
                 </motion.button>
@@ -301,7 +303,7 @@ const BlogPostPage = () => {
                     ? 'bg-emerald-500 text-white'
                     : 'bg-emerald-500 text-white hover:bg-emerald-600'
                 }`}
-                aria-label={speechState === 'idle' ? 'Escuchar artículo' : speechState === 'playing' ? 'Pausar' : 'Continuar'}
+                aria-label={speechState === 'idle' ? (language === 'es' ? 'Escuchar artículo' : 'Listen to article') : speechState === 'playing' ? (language === 'es' ? 'Pausar' : 'Pause') : (language === 'es' ? 'Continuar' : 'Continue')}
               >
                 {/* Ondas de sonido animadas */}
                 {speechState === 'playing' && (
@@ -389,19 +391,19 @@ const BlogPostPage = () => {
               <div className="flex items-center gap-4">
                 <span className={`flex items-center gap-2 font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   <Share2 size={18} />
-                  Compartir:
+                  {language === 'es' ? 'Compartir:' : 'Share:'}
                 </span>
                 <button
                   onClick={shareOnLinkedIn}
                   className={`p-2 rounded-full transition-colors ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-                  aria-label="Compartir en LinkedIn"
+                  aria-label={language === 'es' ? 'Compartir en LinkedIn' : 'Share on LinkedIn'}
                 >
                   <Linkedin size={20} className="text-[#0077B5]" />
                 </button>
                 <button
                   onClick={shareOnTwitter}
                   className={`p-2 rounded-full transition-colors ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
-                  aria-label="Compartir en Twitter"
+                  aria-label={language === 'es' ? 'Compartir en Twitter' : 'Share on Twitter'}
                 >
                   <Twitter size={20} className="text-[#1DA1F2]" />
                 </button>
@@ -424,7 +426,7 @@ const BlogPostPage = () => {
                 <div>
                   <h3 className="font-bold text-lg">Pedro Varela</h3>
                   <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Desarrollador Fullstack
+                    {language === 'es' ? 'Desarrollador Fullstack' : 'Fullstack Developer'}
                   </p>
                 </div>
               </div>

@@ -2,10 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { useLanguage } from '../LanguageContext';
 import { projectsData } from '../data/projects';
 
 export const ProjectsSection = () => {
   const { isDark } = useTheme();
+  const { language } = useLanguage();
 
   return (
     <motion.section
@@ -17,10 +19,16 @@ export const ProjectsSection = () => {
       className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
         <div>
-          <h4 className="text-emerald-500 font-bold uppercase tracking-widest text-sm mb-4">Proyectos Destacados</h4>
-          <h2 className="text-4xl md:text-5xl font-bold">Soluciones Empresariales</h2>
+          <h4 className="text-emerald-500 font-bold uppercase tracking-widest text-sm mb-4">
+            {language === 'es' ? 'Proyectos Destacados' : 'Featured Projects'}
+          </h4>
+          <h2 className="text-4xl md:text-5xl font-bold">
+            {language === 'es' ? 'Soluciones Empresariales' : 'Enterprise Solutions'}
+          </h2>
           <p className={`mt-4 text-lg max-w-2xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Proyectos desarrollados para clientes empresariales bajo acuerdos de confidencialidad.
+            {language === 'es'
+              ? 'Proyectos desarrollados para clientes empresariales bajo acuerdos de confidencialidad.'
+              : 'Projects developed for enterprise clients under confidentiality agreements.'}
           </p>
         </div>
         <motion.a
@@ -30,7 +38,7 @@ export const ProjectsSection = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className={`px-6 py-3 border-2 font-bold transition-colors flex items-center gap-2 ${isDark ? 'border-white hover:bg-white hover:text-black' : 'border-black hover:bg-black hover:text-white'}`}>
-          Ver GitHub <ExternalLink size={18} />
+          {language === 'es' ? 'Ver GitHub' : 'View GitHub'} <ExternalLink size={18} />
         </motion.a>
       </div>
 
@@ -52,9 +60,13 @@ export const ProjectsSection = () => {
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <h3 className="text-xl font-bold group-hover:text-emerald-500 transition-colors">{project.title}</h3>
+                  <h3 className="text-xl font-bold group-hover:text-emerald-500 transition-colors">
+                    {language === 'es' ? project.title : (project.titleEn || project.title)}
+                  </h3>
                 </div>
-                <p className={`text-xs font-semibold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>{project.type}</p>
+                <p className={`text-xs font-semibold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                  {language === 'es' ? project.type : (project.typeEn || project.type)}
+                </p>
                 <p className={`text-xs font-mono font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>{project.year}</p>
               </div>
               {project.confidential && (
@@ -72,20 +84,30 @@ export const ProjectsSection = () => {
 
             {/* Role */}
             <div className="mb-3">
-              <p className={`text-xs uppercase tracking-wider font-bold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Mi Rol</p>
-              <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{project.role}</p>
+              <p className={`text-xs uppercase tracking-wider font-bold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                {language === 'es' ? 'Mi Rol' : 'My Role'}
+              </p>
+              <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                {language === 'es' ? project.role : (project.roleEn || project.role)}
+              </p>
             </div>
 
             {/* Impact */}
             <div className="mb-4">
-              <p className={`text-xs uppercase tracking-wider font-bold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Impacto</p>
-              <p className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{project.impact}</p>
+              <p className={`text-xs uppercase tracking-wider font-bold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                {language === 'es' ? 'Impacto' : 'Impact'}
+              </p>
+              <p className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                {language === 'es' ? project.impact : (project.impactEn || project.impact)}
+              </p>
             </div>
 
             {/* Footer note or link */}
             {project.confidential ? (
               <div className={`mt-4 pt-4 border-t text-xs italic ${isDark ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-500'}`}>
-                Código fuente bajo acuerdo de confidencialidad con el cliente
+                {language === 'es'
+                  ? 'Código fuente bajo acuerdo de confidencialidad con el cliente'
+                  : 'Source code under NDA with client'}
               </div>
             ) : project.url ? (
               <div className="mt-4 pt-4 border-t">
@@ -94,12 +116,12 @@ export const ProjectsSection = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">
-                  Ver Proyecto en Vivo <ExternalLink size={14} />
+                  {language === 'es' ? 'Ver Proyecto en Vivo' : 'View Live Project'} <ExternalLink size={14} />
                 </a>
               </div>
             ) : (
               <div className={`mt-4 pt-4 border-t text-xs ${isDark ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-500'}`}>
-                Proyecto implementado y en producción
+                {language === 'es' ? 'Proyecto implementado y en producción' : 'Project implemented and in production'}
               </div>
             )}
           </motion.div>
@@ -113,9 +135,13 @@ export const ProjectsSection = () => {
         transition={{ duration: 0.6, delay: 0.4 }}
         viewport={{ once: true }}
         className={`mt-16 p-8 rounded-2xl border-2 text-center ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
-        <h3 className="text-2xl font-bold mb-3">¿Quieres ver código real?</h3>
+        <h3 className="text-2xl font-bold mb-3">
+          {language === 'es' ? '¿Quieres ver código real?' : 'Want to see real code?'}
+        </h3>
         <p className={`mb-6 max-w-2xl mx-auto ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-          Visita mi GitHub para proyectos open source donde demuestro las mismas tecnologías y arquitecturas que uso en proyectos empresariales.
+          {language === 'es'
+            ? 'Visita mi GitHub para proyectos open source donde demuestro las mismas tecnologías y arquitecturas que uso en proyectos empresariales.'
+            : 'Visit my GitHub for open source projects where I demonstrate the same technologies and architectures I use in enterprise projects.'}
         </p>
         <motion.a
           href="https://github.com/consultorvarela"
@@ -125,7 +151,7 @@ export const ProjectsSection = () => {
           whileTap={{ scale: 0.95 }}
           className="inline-flex items-center gap-2 bg-emerald-500 text-white px-8 py-4 font-bold rounded-lg hover:bg-emerald-600 transition-colors">
           <Github size={20} />
-          Ver Proyectos Open Source
+          {language === 'es' ? 'Ver Proyectos Open Source' : 'View Open Source Projects'}
         </motion.a>
       </motion.div>
     </motion.section>

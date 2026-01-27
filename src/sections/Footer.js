@@ -1,8 +1,10 @@
 import React from 'react';
 import { useTheme } from '../ThemeContext';
+import { useLanguage } from '../LanguageContext';
 
 export const Footer = () => {
   const { isDark } = useTheme();
+  const { language } = useLanguage();
 
   return (
     <footer className={`text-white border-t py-12 px-6 ${isDark ? 'bg-gray-950 border-gray-800' : 'bg-black border-white/10'}`}>
@@ -15,11 +17,11 @@ export const Footer = () => {
         </div>
         
         <div className="text-gray-500 text-sm">
-          © {new Date().getFullYear()} Pedro Varela. Todos los derechos reservados.
+          © {new Date().getFullYear()} Pedro Varela. {language === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}
         </div>
 
         <div className="flex gap-6 text-sm">
-          <span className="text-gray-600">Hecho con React + Tailwind CSS</span>
+          <span className="text-gray-600">{language === 'es' ? 'Hecho con' : 'Made with'} React + Tailwind CSS</span>
         </div>
       </div>
     </footer>

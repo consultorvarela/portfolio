@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Github, MapPin, Send, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { useLanguage } from '../LanguageContext';
 import emailjs from '@emailjs/browser';
 
 const EMAILJS_SERVICE_ID = 'service_c27cauk';
@@ -10,6 +11,7 @@ const EMAILJS_PUBLIC_KEY = 'xLahVHUVqfirF3JTp';
 
 export const ContactSection = () => {
   const { isDark } = useTheme();
+  const { language } = useLanguage();
   const formRef = useRef();
   const [formData, setFormData] = useState({
     from_name: '',
@@ -25,24 +27,24 @@ export const ContactSection = () => {
   const validateField = (name, value) => {
     switch (name) {
       case 'from_name':
-        if (!value.trim()) return 'El nombre es requerido';
+        if (!value.trim()) return language === 'es' ? 'El nombre es requerido' : 'Name is required';
         const words = value.trim().split(/\s+/).filter(w => w.length > 0);
-        if (words.length < 2) return 'Ingresa nombre y apellido';
-        if (value.trim().length > 50) return 'Máximo 50 caracteres';
+        if (words.length < 2) return language === 'es' ? 'Ingresa nombre y apellido' : 'Enter first and last name';
+        if (value.trim().length > 50) return language === 'es' ? 'Máximo 50 caracteres' : 'Max 50 characters';
         return '';
       case 'from_email':
-        if (!value.trim()) return 'El email es requerido';
+        if (!value.trim()) return language === 'es' ? 'El email es requerido' : 'Email is required';
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)) return 'Email inválido';
+        if (!emailRegex.test(value)) return language === 'es' ? 'Email inválido' : 'Invalid email';
         return '';
       case 'project_type':
-        if (!value.trim()) return 'El tipo de proyecto es requerido';
-        if (value.trim().length < 3) return 'Mínimo 3 caracteres';
+        if (!value.trim()) return language === 'es' ? 'El tipo de proyecto es requerido' : 'Project type is required';
+        if (value.trim().length < 3) return language === 'es' ? 'Mínimo 3 caracteres' : 'Min 3 characters';
         return '';
       case 'message':
-        if (!value.trim()) return 'El mensaje es requerido';
-        if (value.trim().length < 20) return 'Mínimo 20 caracteres';
-        if (value.trim().length > 1000) return 'Máximo 1000 caracteres';
+        if (!value.trim()) return language === 'es' ? 'El mensaje es requerido' : 'Message is required';
+        if (value.trim().length < 20) return language === 'es' ? 'Mínimo 20 caracteres' : 'Min 20 characters';
+        if (value.trim().length > 1000) return language === 'es' ? 'Máximo 1000 caracteres' : 'Max 1000 characters';
         return '';
       default:
         return '';
@@ -122,7 +124,7 @@ export const ContactSection = () => {
       setTimeout(() => setStatus('idle'), 5000);
     } catch (error) {
       setStatus('error');
-      setErrorMessage('Error al enviar. Intenta de nuevo o escríbeme directamente.');
+      setErrorMessage(language === 'es' ? 'Error al enviar. Intenta de nuevo o escríbeme directamente.' : 'Error sending. Try again or write me directly.');
       console.error('EmailJS Error:', error);
     }
   };
@@ -149,10 +151,20 @@ export const ContactSection = () => {
 
       <div className="max-w-7xl mx-auto relative z-10 grid lg:grid-cols-2 gap-16">
         <div>
-          <h4 className="text-emerald-400 font-bold uppercase tracking-widest text-sm mb-4">Ponte en Contacto</h4>
-          <h2 className="text-5xl md:text-6xl font-bold mb-8 leading-tight">Construyamos algo <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-200">escalable</span> juntos.</h2>
+          <h4 className="text-emerald-400 font-bold uppercase tracking-widest text-sm mb-4">
+            {language === 'es' ? 'Ponte en Contacto' : 'Get in Touch'}
+          </h4>
+          <h2 className="text-5xl md:text-6xl font-bold mb-8 leading-tight">
+            {language === 'es' ? 'Construyamos algo ' : "Let's build something "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-200">
+              {language === 'es' ? 'escalable' : 'scalable'}
+            </span>
+            {language === 'es' ? ' juntos.' : ' together.'}
+          </h2>
           <p className="text-gray-400 text-lg mb-12 max-w-md">
-            ¿Buscas un desarrollador para unirte a tu equipo o construir tu MVP? Escribamos código limpio.
+            {language === 'es'
+              ? '¿Buscas un desarrollador para unirte a tu equipo o construir tu MVP? Escribamos código limpio.'
+              : 'Looking for a developer to join your team or build your MVP? Let\'s write clean code.'}
           </p>
 
           <div className="space-y-6">
@@ -161,7 +173,7 @@ export const ContactSection = () => {
                 <Mail />
               </div>
               <div>
-                <p className="text-gray-400 text-sm">Envíame un Email</p>
+                <p className="text-gray-400 text-sm">{language === 'es' ? 'Envíame un Email' : 'Send me an Email'}</p>
                 <a href="mailto:consultorvarela@gmail.com" className="text-xl font-bold hover:text-emerald-400 transition-colors">consultorvarela@gmail.com</a>
               </div>
             </div>
@@ -170,7 +182,7 @@ export const ContactSection = () => {
                 <Github />
               </div>
               <div>
-                <p className="text-gray-400 text-sm">Revisa mi Código</p>
+                <p className="text-gray-400 text-sm">{language === 'es' ? 'Revisa mi Código' : 'Check my Code'}</p>
                 <a href="https://github.com/consultorvarela" target="_blank" rel="noopener noreferrer" className="text-xl font-bold hover:text-emerald-400 transition-colors">github.com/consultorvarela</a>
               </div>
             </div>
@@ -179,7 +191,7 @@ export const ContactSection = () => {
                 <MapPin />
               </div>
               <div>
-                <p className="text-gray-400 text-sm">Ubicación</p>
+                <p className="text-gray-400 text-sm">{language === 'es' ? 'Ubicación' : 'Location'}</p>
                 <p className="text-xl font-bold">Honduras</p>
               </div>
             </div>
@@ -205,15 +217,15 @@ export const ContactSection = () => {
               className="flex flex-col items-center justify-center h-full min-h-[400px] text-center"
             >
               <CheckCircle className="w-16 h-16 text-emerald-400 mb-4" />
-              <h3 className="text-2xl font-bold mb-2">Mensaje Enviado</h3>
-              <p className="text-gray-400">Te responderé lo antes posible.</p>
+              <h3 className="text-2xl font-bold mb-2">{language === 'es' ? 'Mensaje Enviado' : 'Message Sent'}</h3>
+              <p className="text-gray-400">{language === 'es' ? 'Te responderé lo antes posible.' : 'I\'ll get back to you as soon as possible.'}</p>
             </motion.div>
           ) : (
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-6" noValidate>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <label className="text-sm font-bold tracking-wide text-gray-400">NOMBRE COMPLETO *</label>
+                    <label className="text-sm font-bold tracking-wide text-gray-400">{language === 'es' ? 'NOMBRE COMPLETO *' : 'FULL NAME *'}</label>
                   </div>
                   <input
                     type="text"
@@ -222,12 +234,12 @@ export const ContactSection = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className={inputClasses('from_name')}
-                    placeholder="Juan Pérez"
+                    placeholder={language === 'es' ? 'Juan Pérez' : 'John Doe'}
                   />
                   {touched.from_name && errors.from_name ? (
                     <p className="text-red-400 text-xs mt-1">{errors.from_name}</p>
                   ) : (
-                    <p className="text-gray-600 text-xs mt-1">Nombre y apellido</p>
+                    <p className="text-gray-600 text-xs mt-1">{language === 'es' ? 'Nombre y apellido' : 'First and last name'}</p>
                   )}
                 </div>
                 <div className="space-y-2">
@@ -241,18 +253,18 @@ export const ContactSection = () => {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className={inputClasses('from_email')}
-                    placeholder="juan@empresa.com"
+                    placeholder={language === 'es' ? 'juan@empresa.com' : 'john@company.com'}
                   />
                   {touched.from_email && errors.from_email ? (
                     <p className="text-red-400 text-xs mt-1">{errors.from_email}</p>
                   ) : (
-                    <p className="text-gray-600 text-xs mt-1">Email válido para contactarte</p>
+                    <p className="text-gray-600 text-xs mt-1">{language === 'es' ? 'Email válido para contactarte' : 'Valid email to contact you'}</p>
                   )}
                 </div>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label className="text-sm font-bold tracking-wide text-gray-400">TIPO DE PROYECTO *</label>
+                  <label className="text-sm font-bold tracking-wide text-gray-400">{language === 'es' ? 'TIPO DE PROYECTO *' : 'PROJECT TYPE *'}</label>
                 </div>
                 <input
                   type="text"
@@ -261,17 +273,17 @@ export const ContactSection = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   className={inputClasses('project_type')}
-                  placeholder="Aplicación Web, API, Consultoría..."
+                  placeholder={language === 'es' ? 'Aplicación Web, API, Consultoría...' : 'Web App, API, Consulting...'}
                 />
                 {touched.project_type && errors.project_type ? (
                   <p className="text-red-400 text-xs mt-1">{errors.project_type}</p>
                 ) : (
-                  <p className="text-gray-600 text-xs mt-1">Mín. 3 caracteres</p>
+                  <p className="text-gray-600 text-xs mt-1">{language === 'es' ? 'Mín. 3 caracteres' : 'Min. 3 characters'}</p>
                 )}
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label className="text-sm font-bold tracking-wide text-gray-400">MENSAJE *</label>
+                  <label className="text-sm font-bold tracking-wide text-gray-400">{language === 'es' ? 'MENSAJE *' : 'MESSAGE *'}</label>
                   <span className={`text-xs ${formData.message.length > 1000 ? 'text-red-400' : formData.message.length >= 20 ? 'text-emerald-500' : 'text-gray-500'}`}>
                     {formData.message.length}/1000
                   </span>
@@ -282,12 +294,12 @@ export const ContactSection = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   className={`${inputClasses('message')} h-32 resize-none`}
-                  placeholder="Cuéntame sobre tu proyecto, objetivos y timeline..."
+                  placeholder={language === 'es' ? 'Cuéntame sobre tu proyecto, objetivos y timeline...' : 'Tell me about your project, goals and timeline...'}
                 ></textarea>
                 {touched.message && errors.message ? (
                   <p className="text-red-400 text-xs mt-1">{errors.message}</p>
                 ) : (
-                  <p className="text-gray-600 text-xs mt-1">Mín. 20 caracteres. Describe tu proyecto con detalle.</p>
+                  <p className="text-gray-600 text-xs mt-1">{language === 'es' ? 'Mín. 20 caracteres. Describe tu proyecto con detalle.' : 'Min. 20 characters. Describe your project in detail.'}</p>
                 )}
               </div>
 
@@ -310,11 +322,11 @@ export const ContactSection = () => {
                 {status === 'sending' ? (
                   <>
                     <Loader2 size={20} className="animate-spin" />
-                    Enviando...
+                    {language === 'es' ? 'Enviando...' : 'Sending...'}
                   </>
                 ) : (
                   <>
-                    Enviar Mensaje
+                    {language === 'es' ? 'Enviar Mensaje' : 'Send Message'}
                     <Send size={18} />
                   </>
                 )}

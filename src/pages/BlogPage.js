@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { useLanguage } from '../LanguageContext';
 import { getAllPosts } from '../data/blogPosts';
 import Navbar from '../components/navigation/Navbar';
 import Footer from '../sections/Footer';
@@ -10,13 +11,14 @@ import SEO from '../components/common/SEO';
 
 const BlogPage = () => {
   const { isDark } = useTheme();
+  const { language } = useLanguage();
   const posts = getAllPosts();
 
   return (
     <>
       <SEO
         title="Blog | Pedro Varela"
-        description="Artículos sobre desarrollo de software, arquitectura y tecnología"
+        description={language === 'es' ? 'Artículos sobre desarrollo de software, arquitectura y tecnología' : 'Articles about software development, architecture and technology'}
       />
       <div className={`min-h-screen font-sans transition-colors duration-300 ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-slate-900'}`}>
         <Navbar />
@@ -29,7 +31,7 @@ const BlogPage = () => {
               className={`inline-flex items-center gap-2 mb-8 text-sm font-medium hover:text-emerald-500 transition-colors ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
             >
               <ArrowLeft size={16} />
-              Volver al inicio
+              {language === 'es' ? 'Volver al inicio' : 'Back to home'}
             </Link>
 
             {/* Header */}
@@ -43,7 +45,9 @@ const BlogPage = () => {
                 Blog
               </h1>
               <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                Reflexiones y aprendizajes sobre desarrollo de software, arquitectura y tecnología.
+                {language === 'es'
+                  ? 'Reflexiones y aprendizajes sobre desarrollo de software, arquitectura y tecnología.'
+                  : 'Reflections and learnings about software development, architecture and technology.'}
               </p>
             </motion.div>
 
@@ -95,7 +99,7 @@ const BlogPage = () => {
                         <div className={`flex items-center gap-4 text-sm ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
                           <span className="flex items-center gap-1">
                             <Calendar size={14} />
-                            {new Date(post.date).toLocaleDateString('es-ES', {
+                            {new Date(post.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', {
                               year: 'numeric',
                               month: 'long',
                               day: 'numeric'
@@ -109,7 +113,7 @@ const BlogPage = () => {
 
                         {/* Read more */}
                         <div className="mt-4 flex items-center gap-2 text-emerald-500 font-medium">
-                          Leer más <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                          {language === 'es' ? 'Leer más' : 'Read more'} <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                         </div>
                       </div>
                     </div>
@@ -120,7 +124,7 @@ const BlogPage = () => {
 
             {posts.length === 0 && (
               <div className={`text-center py-20 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                <p>No hay artículos publicados todavía.</p>
+                <p>{language === 'es' ? 'No hay artículos publicados todavía.' : 'No articles published yet.'}</p>
               </div>
             )}
           </div>

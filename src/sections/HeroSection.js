@@ -2,11 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Github, Globe, Linkedin, ArrowDown, Code } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { useLanguage } from '../LanguageContext';
 import Particles3D from '../Particles3D';
 import { TypewriterText } from '../components/ui/TypewriterText';
 
 export const HeroSection = ({ scrollToSection }) => {
   const { isDark } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-6 md:px-12 overflow-hidden">
@@ -39,12 +41,12 @@ export const HeroSection = ({ scrollToSection }) => {
 
           {/* Título */}
           <div>
-            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Pedro Varela</p>
-            <h1 className="text-xl font-extrabold leading-tight">
-              Desarrollador Fullstack
+            <p className={`text-base font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{t('hero.greeting')}</p>
+            <h1 className="text-2xl font-extrabold leading-tight">
+              {t('hero.title')}
             </h1>
-            <p className="text-sm">
-              Con base en <span className="text-emerald-500 font-bold">Honduras</span>
+            <p className="text-base">
+              {t('hero.location')} <span className="text-emerald-500 font-bold">{t('hero.country')}</span>
             </p>
           </div>
         </motion.div>
@@ -72,59 +74,41 @@ export const HeroSection = ({ scrollToSection }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-gray-500 text-base leading-relaxed mb-6"
+          className="text-gray-500 text-base leading-relaxed mb-5"
         >
-          Transformo ideas en soluciones digitales escalables. Especializado en crear aplicaciones web de alto rendimiento con arquitecturas backend sólidas y experiencias frontend intuitivas.
+          {t('hero.description')}
         </motion.p>
 
-        {/* Botón */}
+        {/* Botón y Redes sociales en línea */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="mb-6"
+          className="flex items-center justify-between gap-4"
         >
-          <button onClick={() => scrollToSection('contact')} className="relative group w-full">
-            <div className="absolute inset-0 bg-emerald-400 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
-            <div className="relative bg-black text-white px-6 py-3 font-bold flex items-center justify-center gap-2 border-2 border-transparent transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5 text-sm">
-              Contrátame <ArrowUpRight size={18} />
+          {/* Botón compacto */}
+          <button onClick={() => scrollToSection('contact')} className="relative group">
+            <div className="absolute inset-0 bg-emerald-400 translate-x-1 translate-y-1"></div>
+            <div className="relative bg-black text-white px-5 py-2.5 font-bold flex items-center gap-2 text-sm">
+              {t('hero.cta')} <ArrowUpRight size={16} />
             </div>
           </button>
-        </motion.div>
 
-        {/* Redes sociales */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex items-center justify-center gap-4"
-        >
-          <span className={`text-xs font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Sígueme:</span>
-          <div className="flex gap-3">
+          {/* Redes sociales */}
+          <div className="flex items-center gap-2">
             <motion.a
-              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               href="https://github.com/consultorvarela"
               target="_blank"
               rel="noopener noreferrer"
-              className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${isDark ? 'border-gray-600 hover:bg-white hover:text-black hover:border-white' : 'border-gray-300 hover:bg-black hover:text-white hover:border-black'}`}>
-              <Github size={18} />
+              className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all ${isDark ? 'border-gray-600' : 'border-gray-300'}`}>
+              <Github size={16} />
             </motion.a>
             <motion.a
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              href="https://www.consultorvarela.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all ${isDark ? 'border-gray-600 hover:bg-white hover:text-black hover:border-white' : 'border-gray-300 hover:bg-black hover:text-white hover:border-black'}`}>
-              <Globe size={18} />
-            </motion.a>
-            <motion.a
-              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               href="https://www.linkedin.com/in/consultorvarela/"
-              className="w-10 h-10 rounded-full bg-emerald-400 border border-emerald-400 text-white flex items-center justify-center hover:bg-emerald-500 transition-all">
-              <Linkedin size={18} />
+              className="w-9 h-9 rounded-full bg-emerald-400 text-white flex items-center justify-center">
+              <Linkedin size={16} />
             </motion.a>
           </div>
         </motion.div>
@@ -157,27 +141,27 @@ export const HeroSection = ({ scrollToSection }) => {
           </motion.div>
 
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
-            <span className="block lg:inline">Desarrollador Fullstack</span>
+            <span className="block lg:inline">{t('hero.title')}</span>
             <br className="hidden lg:block" />
-            <span className="block lg:inline">Con base en </span>
-            <span className="text-emerald-500">Honduras</span>
+            <span className="block lg:inline">{t('hero.location')} </span>
+            <span className="text-emerald-500">{t('hero.country')}</span>
           </h1>
 
           <p className="text-gray-500 text-base md:text-lg lg:text-xl max-w-lg mx-auto lg:mx-0 leading-relaxed">
-            Transformo ideas en soluciones digitales escalables. Especializado en crear aplicaciones web de alto rendimiento con arquitecturas backend sólidas y experiencias frontend intuitivas.
+            {t('hero.descriptionFull')}
           </p>
 
           <div className="flex flex-row gap-3 md:gap-5 pt-2 justify-center lg:justify-start">
             <button onClick={() => scrollToSection('contact')} className="relative group flex-1 md:flex-none">
               <div className="absolute inset-0 bg-emerald-400 translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
               <div className="relative bg-black text-white px-6 md:px-8 py-3 md:py-4 font-bold flex items-center justify-center gap-2 border-2 border-transparent transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5 text-sm md:text-base">
-                Contrátame <ArrowUpRight size={18} className="md:w-5 md:h-5" />
+                {t('hero.cta')} <ArrowUpRight size={18} className="md:w-5 md:h-5" />
               </div>
             </button>
           </div>
 
           <div className="flex items-center justify-center lg:justify-start gap-4 pt-4">
-            <span className={`text-xs md:text-sm font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Sígueme:</span>
+            <span className={`text-xs md:text-sm font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('hero.follow')}</span>
             <div className="flex gap-3">
               <motion.a
                 whileHover={{ scale: 1.1 }}

@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X, Sun, Moon, Github, Globe, Linkedin, BookOpen } from 'lucide-react';
+import { Menu, X, Sun, Moon, Github, Globe, Linkedin, BookOpen, Languages } from 'lucide-react';
 import { useTheme } from '../../ThemeContext';
+import { useLanguage } from '../../LanguageContext';
 
 export const Navbar = ({ activeSection, scrollToSection }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isDark, toggleTheme } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
-  const menuItems = ['Inicio', 'Acerca', 'Habilidades', 'Experiencia', 'Proyectos', 'Contacto'];
+  const menuItems = [t('nav.home'), t('nav.about'), t('nav.skills'), t('nav.experience'), t('nav.projects'), t('nav.contact')];
   const menuIds = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
 
   return (
@@ -49,6 +51,16 @@ export const Navbar = ({ activeSection, scrollToSection }) => {
           Blog
         </Link>
 
+        {/* Language Toggle */}
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={toggleLanguage}
+          className={`px-2 py-1 rounded-full font-bold text-xs transition-colors ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}
+        >
+          {language === 'es' ? 'EN' : 'ES'}
+        </motion.button>
+
         {/* Theme Toggle */}
         <motion.button
           whileHover={{ scale: 1.1 }}
@@ -61,14 +73,21 @@ export const Navbar = ({ activeSection, scrollToSection }) => {
       </div>
 
       {/* Mobile Menu Toggle and Theme */}
-      <div className="md:hidden flex items-center gap-3">
+      <div className="md:hidden flex items-center gap-2">
         <motion.button
-          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={toggleLanguage}
+          className={`px-2 py-1 rounded-full font-bold text-xs transition-colors ${isDark ? 'bg-gray-800' : 'bg-gray-100'}`}
+        >
+          {language === 'es' ? 'EN' : 'ES'}
+        </motion.button>
+
+        <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={toggleTheme}
-          className={`p-2 rounded-full transition-colors ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}
+          className={`p-2 rounded-full transition-colors ${isDark ? 'bg-gray-800' : 'bg-gray-100'}`}
         >
-          {isDark ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-gray-700" />}
+          {isDark ? <Sun size={18} className="text-yellow-400" /> : <Moon size={18} className="text-gray-700" />}
         </motion.button>
 
         <button className="p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -94,14 +113,21 @@ export const Navbar = ({ activeSection, scrollToSection }) => {
               <span className="font-bold text-xl tracking-tight">Pedro</span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <motion.button
-                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={toggleLanguage}
+                className={`px-2 py-1 rounded-full font-bold text-xs transition-colors ${isDark ? 'bg-gray-800' : 'bg-gray-100'}`}
+              >
+                {language === 'es' ? 'EN' : 'ES'}
+              </motion.button>
+
+              <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={toggleTheme}
-                className={`p-2 rounded-full transition-colors ${isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}
+                className={`p-2 rounded-full transition-colors ${isDark ? 'bg-gray-800' : 'bg-gray-100'}`}
               >
-                {isDark ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-gray-700" />}
+                {isDark ? <Sun size={18} className="text-yellow-400" /> : <Moon size={18} className="text-gray-700" />}
               </motion.button>
 
               <button className="p-2" onClick={() => setIsMenuOpen(false)}>
