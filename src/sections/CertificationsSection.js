@@ -1,31 +1,67 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Award, ExternalLink } from 'lucide-react';
+import { Award, ShieldCheck } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { useLanguage } from '../LanguageContext';
+
+const certifications = [
+  {
+    issuer: 'Google',
+    title: 'Ciberseguridad',
+    titleEn: 'Cybersecurity',
+    year: '2026',
+    highlight: true,
+    items: [
+      'Foundations of Cybersecurity',
+      'Play It Safe: Manage Security Risks',
+      'Connect and Protect: Networks and Network Security',
+    ],
+  },
+  {
+    issuer: 'Cisco',
+    title: 'Python y Linux',
+    titleEn: 'Python & Linux',
+    year: '2019 - 2026',
+    items: ['Python Essentials 1', 'Python Essentials 2', 'NDG Linux'],
+  },
+  {
+    issuer: 'Platzi',
+    title: 'Ingeniería de Software y DevOps',
+    titleEn: 'Software Engineering & DevOps',
+    year: '2019 - 2026',
+    items: ['Ingeniería de Software', 'Introducción a DevOps y Docker', 'Git y GitHub · Flask · JavaScript ES6+'],
+    itemsEn: ['Software Engineering', 'Introduction to DevOps and Docker', 'Git & GitHub · Flask · JavaScript ES6+'],
+  },
+  {
+    issuer: 'Microsoft',
+    title: 'Cloud Computing',
+    titleEn: 'Cloud Computing',
+    year: '2025 - 2026',
+    items: ['Cloud Computing'],
+  },
+  {
+    issuer: 'Adobe',
+    title: 'Diseño de UX',
+    titleEn: 'UX Design',
+    year: '2025 - 2026',
+    items: ['Diseño de experiencia de usuario'],
+    itemsEn: ['User experience design'],
+  },
+  {
+    issuer: 'PMI',
+    title: 'Project Management Institute',
+    titleEn: 'Project Management Institute',
+    year: 'Miembro activo',
+    yearEn: 'Active member',
+    items: ['Maestría con acreditación PMI (UNITEC)', 'Certificación Scrum Master'],
+    itemsEn: ['PMI-accredited Master\'s degree (UNITEC)', 'Scrum Master certification'],
+  },
+];
 
 export const CertificationsSection = () => {
   const { isDark } = useTheme();
-
-  const certifications = [
-    {
-      name: 'Cisco Certified',
-      subtitle: 'Network Professional',
-      badge: 'CCNA / CCNP',
-      url: '#'
-    },
-    {
-      name: 'Google Cloud',
-      subtitle: 'Certified Professional',
-      badge: 'GCP Developer',
-      url: '#'
-    },
-    {
-      name: 'Microsoft Azure',
-      subtitle: 'Certified Developer',
-      badge: 'AZ-204',
-      url: '#'
-    }
-  ];
+  const { language } = useLanguage();
+  const es = language === 'es';
 
   return (
     <motion.section
@@ -34,70 +70,60 @@ export const CertificationsSection = () => {
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
       id="certifications"
-      className={`py-24 px-6 md:px-12 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          <h4 className="text-emerald-500 font-bold uppercase tracking-widest text-sm mb-4">Validación Profesional</h4>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Certificaciones</h2>
-          <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Certificado por las empresas tecnológicas líderes de la industria.</p>
+      className={`py-24 lg:py-10 px-6 md:px-12 lg:min-h-[calc(100vh-80px)] lg:flex lg:flex-col lg:justify-center ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
+      <div className="max-w-7xl mx-auto w-full">
+        <div className="text-center mb-16 lg:mb-10 max-w-2xl mx-auto">
+          <h4 className="text-emerald-500 font-bold uppercase tracking-widest text-sm mb-4">
+            {es ? 'Formación Continua' : 'Continuous Learning'}
+          </h4>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 lg:mb-4">
+            {es ? 'Certificaciones' : 'Certifications'}
+          </h2>
+          <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            {es
+              ? 'Cursos y certificaciones recientes en seguridad, desarrollo e infraestructura.'
+              : 'Recent courses and certifications in security, development and infrastructure.'}
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {certifications.map((cert, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              className={`group relative p-8 border-2 transition-all hover:shadow-2xl hover:-translate-y-2 ${isDark ? 'bg-gray-800 border-gray-700 hover:border-emerald-400' : 'bg-white border-gray-200 hover:border-emerald-500'}`}>
-              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <ExternalLink size={20} className="text-emerald-500" />
-              </div>
-
-              <div className="flex items-center justify-center mb-6 h-20">
-                <Award size={64} className="text-emerald-500" />
-              </div>
-
-              <div className="text-center">
-                <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>{cert.name}</h3>
-                <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{cert.subtitle}</p>
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  <Award size={16} className="text-emerald-500" />
-                  <span className="text-sm font-mono text-emerald-500">{cert.badge}</span>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {certifications.map((cert, idx) => {
+            const Icon = cert.highlight ? ShieldCheck : Award;
+            const items = es ? cert.items : (cert.itemsEn || cert.items);
+            return (
+              <motion.div
+                key={cert.issuer}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                className={`p-6 border-2 transition-all hover:shadow-xl ${cert.highlight
+                  ? (isDark ? 'bg-gray-800 border-emerald-500/60' : 'bg-emerald-50/60 border-emerald-400')
+                  : (isDark ? 'bg-gray-800 border-gray-700 hover:border-emerald-400' : 'bg-white border-gray-200 hover:border-emerald-500')}`}>
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-500">{cert.issuer}</p>
+                    <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {es ? cert.title : cert.titleEn}
+                    </h3>
+                  </div>
+                  <Icon size={28} className="text-emerald-500 shrink-0" />
                 </div>
-                <a href={cert.url} className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">
-                  Ver Credencial <ExternalLink size={14} />
-                </a>
-              </div>
-            </motion.div>
-          ))}
+                <ul className={`space-y-1.5 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {items.map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="text-emerald-500">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className={`mt-4 text-xs font-mono ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                  {es ? cert.year : (cert.yearEn || cert.year)}
+                </p>
+              </motion.div>
+            );
+          })}
         </div>
-
-        {/* Stats Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div>
-            <p className="text-4xl font-bold text-emerald-500 mb-2">3+</p>
-            <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Certificaciones</p>
-          </div>
-          <div>
-            <p className="text-4xl font-bold text-emerald-500 mb-2">10+</p>
-            <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Años Experiencia</p>
-          </div>
-          <div>
-            <p className="text-4xl font-bold text-emerald-500 mb-2">10+</p>
-            <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Proyectos Completados</p>
-          </div>
-          <div>
-            <p className="text-4xl font-bold text-emerald-500 mb-2">10+</p>
-            <p className={`text-sm uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Tecnologías Implementadas</p>
-          </div>
-        </motion.div>
       </div>
     </motion.section>
   );

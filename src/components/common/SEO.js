@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
 export const SEO = ({
-  title = "Pedro Varela - Desarrollador Fullstack | React, Python, Node.js",
-  description = "Portafolio de Pedro Varela, desarrollador fullstack especializado en React, Python, Node.js y AWS. 10+ proyectos en producción, 8+ años de experiencia.",
-  keywords = "desarrollador fullstack, react developer, python developer, nodejs, aws, desarrollador web, programador honduras, fullstack engineer, web development",
+  title = "Pedro Varela - Especialista en Arquitectura y Desarrollo de Software",
+  description = "Más de 10 años desarrollando plataformas de información para BID, FAO, GIZ, Unión Europea, USAID e instituciones públicas de Honduras. Python/Django, PostgreSQL, React y Node.js.",
+  keywords = "arquitectura de software, desarrollador full stack, consultor tecnológico, Python, Django, PostgreSQL, React, Node.js, plataformas de gobierno, cooperación internacional, Honduras",
   author = "Pedro Varela",
-  image = "/og-image.jpg",
+  image = "https://www.consultorvarela.com/img/herovarela.png",
   url = "https://www.consultorvarela.com/",
   type = "website"
 }) => {
@@ -89,8 +89,8 @@ export const SEO = ({
       "name": "Pedro Varela",
       "url": url,
       "image": "https://www.consultorvarela.com/img/herovarela.png",
-      "jobTitle": "Desarrollador Fullstack",
-      "description": "Desarrollador fullstack especializado en React, Python, Node.js y AWS con 8+ años de experiencia en proyectos gubernamentales y empresariales",
+      "jobTitle": "Especialista en Arquitectura y Desarrollo de Software",
+      "description": "Más de 10 años desarrollando plataformas de información para BID, FAO, GIZ, Unión Europea, USAID e instituciones públicas de Honduras. Python/Django, PostgreSQL, React y Node.js.",
       "email": "consultorvarela@gmail.com",
       "worksFor": {
         "@type": "Organization",
@@ -116,7 +116,6 @@ export const SEO = ({
         "Express",
         "AWS",
         "PostgreSQL",
-        "MongoDB",
         "Docker",
         "Full Stack Development",
         "Web Development",
@@ -126,20 +125,13 @@ export const SEO = ({
         "JavaScript",
         "Tailwind CSS"
       ],
-      "alumniOf": {
-        "@type": "EducationalOrganization",
-        "name": "Universidad Nacional Autónoma de Honduras"
-      },
-      "hasCredential": [
-        {
-          "@type": "EducationalOccupationalCredential",
-          "credentialCategory": "Certification",
-          "name": "AWS Certified Developer"
-        }
+      "alumniOf": [
+        { "@type": "EducationalOrganization", "name": "Universidad Tecnológica Centroamericana (UNITEC)" },
+        { "@type": "EducationalOrganization", "name": "Universidad Nacional Autónoma de Honduras (UNAH)" }
       ],
       "seeks": {
         "@type": "Demand",
-        "name": "Oportunidades de desarrollo fullstack y consultoría tecnológica"
+        "name": "Consultorías en arquitectura y desarrollo de software"
       }
     };
 

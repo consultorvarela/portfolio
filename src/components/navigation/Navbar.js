@@ -12,8 +12,8 @@ export const Navbar = ({ activeSection, scrollToSection }) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
-  const menuItems = [t('nav.home'), t('nav.about'), t('nav.skills'), t('nav.experience'), t('nav.projects'), t('nav.contact')];
-  const menuIds = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
+  const menuItems = [t('nav.home'), t('nav.about'), t('nav.skills'), t('nav.experience'), t('nav.contact')];
+  const menuIds = ['home', 'about', 'skills', 'experience', 'contact'];
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 py-6 px-6 md:px-12 flex justify-between items-center transition-all duration-300 border-b ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'}`}>

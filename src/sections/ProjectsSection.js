@@ -7,7 +7,7 @@ import { projectsData } from '../data/projects';
 
 export const ProjectsSection = () => {
   const { isDark } = useTheme();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <motion.section
@@ -23,12 +23,10 @@ export const ProjectsSection = () => {
             {language === 'es' ? 'Proyectos Destacados' : 'Featured Projects'}
           </h4>
           <h2 className="text-4xl md:text-5xl font-bold">
-            {language === 'es' ? 'Soluciones Empresariales' : 'Enterprise Solutions'}
+            {language === 'es' ? 'Plataformas en Producción' : 'Platforms in Production'}
           </h2>
           <p className={`mt-4 text-lg max-w-2xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            {language === 'es'
-              ? 'Proyectos desarrollados para clientes empresariales bajo acuerdos de confidencialidad.'
-              : 'Projects developed for enterprise clients under confidentiality agreements.'}
+            {t('projects.subtitle')}
           </p>
         </div>
         <motion.a
@@ -67,14 +65,8 @@ export const ProjectsSection = () => {
                 <p className={`text-xs font-semibold mb-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
                   {language === 'es' ? project.type : (project.typeEn || project.type)}
                 </p>
-                <p className={`text-xs font-mono font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>{project.year}</p>
+                <p className={`text-xs font-mono font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>{language === 'es' ? project.year : (project.yearEn || project.year)}</p>
               </div>
-              {project.confidential && (
-                <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
-                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                  <span className="text-emerald-500 text-xs font-bold uppercase">NDA</span>
-                </div>
-              )}
             </div>
 
             {/* Tech Stack */}
@@ -103,11 +95,15 @@ export const ProjectsSection = () => {
             </div>
 
             {/* Footer note or link */}
-            {project.confidential ? (
-              <div className={`mt-4 pt-4 border-t text-xs italic ${isDark ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-500'}`}>
-                {language === 'es'
-                  ? 'Código fuente bajo acuerdo de confidencialidad con el cliente'
-                  : 'Source code under NDA with client'}
+            {project.repo ? (
+              <div className="mt-4 pt-4 border-t">
+                <a
+                  href={project.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">
+                  {language === 'es' ? 'Ver Código' : 'View Code'} <Github size={14} />
+                </a>
               </div>
             ) : project.url ? (
               <div className="mt-4 pt-4 border-t">
@@ -140,8 +136,8 @@ export const ProjectsSection = () => {
         </h3>
         <p className={`mb-6 max-w-2xl mx-auto ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
           {language === 'es'
-            ? 'Visita mi GitHub para proyectos open source donde demuestro las mismas tecnologías y arquitecturas que uso en proyectos empresariales.'
-            : 'Visit my GitHub for open source projects where I demonstrate the same technologies and architectures I use in enterprise projects.'}
+            ? 'El código de las plataformas institucionales pertenece a cada institución. En mi GitHub publico proyectos propios con las mismas tecnologías y prácticas.'
+            : 'The source code of institutional platforms belongs to each institution. On my GitHub I publish my own projects using the same technologies and practices.'}
         </p>
         <motion.a
           href="https://github.com/consultorvarela"

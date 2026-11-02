@@ -6,10 +6,9 @@ import HeroSection from './sections/HeroSection';
 import MarqueeSection from './sections/MarqueeSection';
 import AboutSection from './sections/AboutSection';
 import SkillsSection from './sections/SkillsSection';
-// import CertificationsSection from './sections/CertificationsSection'; // Commented out
+import CertificationsSection from './sections/CertificationsSection';
 import ExperienceSection from './sections/ExperienceSection';
 // import ServicesSection from './sections/ServicesSection'; // Commented out
-import ProjectsSection from './sections/ProjectsSection';
 import ContactSection from './sections/ContactSection';
 import Footer from './sections/Footer';
 import { useActiveSection } from './hooks/useActiveSection';
@@ -17,7 +16,7 @@ import { useSmoothScroll } from './hooks/useSmoothScroll';
 
 const Portfolio = () => {
   const { isDark } = useTheme();
-  const sections = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
+  const sections = ['home', 'about', 'skills', 'experience', 'contact'];
   const activeSection = useActiveSection(sections);
   const scrollToSection = useSmoothScroll();
 
@@ -33,10 +32,9 @@ const Portfolio = () => {
         <MarqueeSection />
         <AboutSection />
         <SkillsSection />
-        {/* <CertificationsSection /> */}
+        <CertificationsSection />
         <ExperienceSection />
         {/* <ServicesSection /> */}
-        <ProjectsSection />
         <ContactSection />
         <Footer />
 

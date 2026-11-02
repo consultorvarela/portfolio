@@ -426,7 +426,7 @@ const BlogPostPage = () => {
                 <div>
                   <h3 className="font-bold text-lg">Pedro Varela</h3>
                   <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {language === 'es' ? 'Desarrollador Fullstack' : 'Fullstack Developer'}
+                    {language === 'es' ? 'Especialista en Arquitectura y Desarrollo de Software' : 'Software Architecture & Development Specialist'}
                   </p>
                 </div>
               </div>

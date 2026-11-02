@@ -144,27 +144,27 @@ export const ContactSection = () => {
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
       id="contact"
-      className={`py-24 px-6 md:px-12 text-white relative overflow-hidden ${isDark ? 'bg-gray-950' : 'bg-black'}`}>
+      className={`py-24 lg:py-10 px-6 md:px-12 text-white relative overflow-hidden lg:min-h-[calc(100vh-80px)] lg:flex lg:flex-col lg:justify-center ${isDark ? 'bg-gray-950' : 'bg-black'}`}>
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10 grid lg:grid-cols-2 gap-16">
+      <div className="max-w-7xl mx-auto w-full relative z-10 grid lg:grid-cols-2 gap-16 lg:gap-12">
         <div>
           <h4 className="text-emerald-400 font-bold uppercase tracking-widest text-sm mb-4">
             {language === 'es' ? 'Ponte en Contacto' : 'Get in Touch'}
           </h4>
-          <h2 className="text-5xl md:text-6xl font-bold mb-8 leading-tight">
+          <h2 className="text-5xl md:text-6xl lg:text-5xl font-bold mb-8 lg:mb-6 leading-tight">
             {language === 'es' ? 'Construyamos algo ' : "Let's build something "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-200">
               {language === 'es' ? 'escalable' : 'scalable'}
             </span>
             {language === 'es' ? ' juntos.' : ' together.'}
           </h2>
-          <p className="text-gray-400 text-lg mb-12 max-w-md">
+          <p className="text-gray-400 text-lg mb-12 lg:mb-8 max-w-md">
             {language === 'es'
-              ? '¿Buscas un desarrollador para unirte a tu equipo o construir tu MVP? Escribamos código limpio.'
-              : 'Looking for a developer to join your team or build your MVP? Let\'s write clean code.'}
+              ? '¿Necesitas apoyo en una consultoría o un proyecto tecnológico? Escríbeme y conversemos.'
+              : 'Need support for a consultancy or a technology project? Write to me and let\'s talk.'}
           </p>
 
           <div className="space-y-6">

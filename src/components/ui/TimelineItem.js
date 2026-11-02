@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../LanguageContext';
 
 export const TimelineItem = ({ year, title, subtitle, description, isLast = false, icon: Icon, index, showDescription = true }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { language } = useLanguage();
 
   return (
     <motion.div
@@ -72,7 +74,9 @@ export const TimelineItem = ({ year, title, subtitle, description, isLast = fals
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsExpanded(!isExpanded)}
               className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
-              {isExpanded ? 'Ocultar descripción' : 'Ver descripción'}
+              {language === 'es'
+                ? (isExpanded ? 'Ocultar descripción' : 'Ver descripción')
+                : (isExpanded ? 'Hide description' : 'Show description')}
               <motion.svg
                 animate={{ rotate: isExpanded ? 180 : 0 }}
                 transition={{ duration: 0.3 }}

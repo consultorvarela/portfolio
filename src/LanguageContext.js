@@ -53,20 +53,20 @@ const translations = {
     },
     hero: {
       greeting: 'Pedro Varela',
-      title: 'Desarrollador Fullstack',
+      title: 'Especialista en Arquitectura y Desarrollo de Software',
       location: 'Con base en',
       country: 'Honduras',
       console: 'console.log("Hello World! I\'m Pedro Varela")',
-      description: 'Transformo ideas en soluciones digitales escalables. Especializado en aplicaciones web de alto rendimiento.',
-      descriptionFull: 'Transformo ideas en soluciones digitales escalables. Especializado en crear aplicaciones web de alto rendimiento con arquitecturas backend sólidas y experiencias frontend intuitivas.',
+      description: 'Más de 10 años desarrollando plataformas de información para organismos internacionales e instituciones públicas.',
+      descriptionFull: 'Más de 10 años diseñando, desarrollando e implementando plataformas de información para organismos internacionales (BID, FAO, GIZ, Unión Europea, USAID) e instituciones públicas de Honduras.',
       cta: 'Contrátame',
       follow: 'Sígueme:'
     },
     about: {
       tag: 'ACERCA DE MÍ',
-      title: 'Hablo JavaScript y Python con fluidez.',
-      p1: 'Mi pasión es en la intersección entre la lógica y la creatividad. Comencé como desarrollador autodidacta y he evolucionado hacia un ingeniero fullstack capaz de manejar todo el ciclo de vida del desarrollo de software.',
-      p2: 'Hoy, me especializo en construir aplicaciones web escalables utilizando tecnologías modernas. Mi enfoque combina código limpio con soluciones pragmáticas que generan valor real para el negocio.',
+      title: 'Del diagnóstico a la transferencia tecnológica.',
+      p1: 'Especialista en arquitectura y desarrollo de software full stack con más de 10 años de experiencia en proyectos tecnológicos para organismos internacionales (BID, FAO, GIZ, Unión Europea, USAID) e instituciones públicas de Honduras. Diseño e implemento plataformas que sistematizan información institucional y respaldan programas de derechos humanos, equidad de género y desarrollo sostenible con miles de beneficiarios directos.',
+      p2: 'Trabajo principalmente con Python/Django, PostgreSQL, APIs REST y React, y gestiono el ciclo completo de una consultoría: diagnóstico, diseño de arquitectura, desarrollo, implementación, capacitación de usuarios y transferencia tecnológica. Maestría en Administración de Proyectos y miembro activo del PMI.',
       statsYears: 'Años de experiencia',
       statsProjects: 'Proyectos en producción'
     },
@@ -83,7 +83,7 @@ const translations = {
     projects: {
       tag: 'PROYECTOS',
       title: 'Trabajo Destacado',
-      subtitle: 'Una selección de proyectos que demuestran mi experiencia en desarrollo fullstack.',
+      subtitle: 'Una selección de plataformas desarrolladas para instituciones públicas y organismos internacionales.',
       viewProject: 'Ver Proyecto',
       viewCode: 'Ver Código'
     },
@@ -134,20 +134,20 @@ const translations = {
     },
     hero: {
       greeting: 'Pedro Varela',
-      title: 'Fullstack Developer',
+      title: 'Software Architecture & Development Specialist',
       location: 'Based in',
       country: 'Honduras',
       console: 'console.log("Hello World! I\'m Pedro Varela")',
-      description: 'I transform ideas into scalable digital solutions. Specialized in high-performance web applications.',
-      descriptionFull: 'I transform ideas into scalable digital solutions. Specialized in building high-performance web applications with solid backend architectures and intuitive frontend experiences.',
+      description: '10+ years building information platforms for international organizations and public institutions.',
+      descriptionFull: '10+ years designing, building and deploying information platforms for international organizations (IDB, FAO, GIZ, European Union, USAID) and public institutions in Honduras.',
       cta: 'Hire Me',
       follow: 'Follow me:'
     },
     about: {
       tag: 'ABOUT ME',
-      title: 'I speak JavaScript and Python fluently.',
-      p1: 'My passion lies at the intersection of logic and creativity. I started as a self-taught developer and have evolved into a fullstack engineer capable of handling the entire software development lifecycle.',
-      p2: 'Today, I specialize in building scalable web applications using modern technologies. My approach combines clean code with pragmatic solutions that deliver real business value.',
+      title: 'From assessment to technology transfer.',
+      p1: 'Full stack software architecture and development specialist with over 10 years of experience in technology projects for international organizations (IDB, FAO, GIZ, European Union, USAID) and public institutions in Honduras. I design and deploy platforms that systematize institutional information and support human rights, gender equality and sustainable development programs with thousands of direct beneficiaries.',
+      p2: 'I work mainly with Python/Django, PostgreSQL, REST APIs and React, and I manage the full consultancy cycle: assessment, architecture design, development, deployment, user training and technology transfer. Master in Project Management and active PMI member.',
       statsYears: 'Years of experience',
       statsProjects: 'Projects in production'
     },
@@ -164,7 +164,7 @@ const translations = {
     projects: {
       tag: 'PROJECTS',
       title: 'Featured Work',
-      subtitle: 'A selection of projects showcasing my fullstack development expertise.',
+      subtitle: 'A selection of platforms built for public institutions and international organizations.',
       viewProject: 'View Project',
       viewCode: 'View Code'
     },

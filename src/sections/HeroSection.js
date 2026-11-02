@@ -11,7 +11,7 @@ export const HeroSection = ({ scrollToSection }) => {
   const { t } = useLanguage();
 
   return (
-    <section id="home" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-6 md:px-12 overflow-hidden">
+    <section id="home" className="relative pt-32 pb-20 md:pt-28 md:pb-16 lg:min-h-screen lg:flex lg:items-center px-6 md:px-12 overflow-hidden">
       {/* Partículas 3D de fondo - Todo el ancho */}
       <div className="absolute inset-0 left-0 right-0 z-0 opacity-30 w-screen ml-[calc(-50vw+50%)]">
         <Particles3D />
@@ -115,14 +115,14 @@ export const HeroSection = ({ scrollToSection }) => {
       </div>
 
       {/* ============ LAYOUT DESKTOP (sin cambios) ============ */}
-      <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 max-w-7xl mx-auto">
+      <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 max-w-7xl mx-auto w-full">
 
         {/* Left Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
-          className="relative z-10 space-y-6 md:space-y-8 text-center lg:text-left order-2 lg:order-1">
+          className="relative z-10 space-y-6 text-center lg:text-left order-2 lg:order-1">
           {/* Dev Tool Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -140,14 +140,14 @@ export const HeroSection = ({ scrollToSection }) => {
             </div>
           </motion.div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-[2.75rem] xl:text-5xl font-extrabold leading-[1.1] tracking-tight">
             <span className="block lg:inline">{t('hero.title')}</span>
             <br className="hidden lg:block" />
             <span className="block lg:inline">{t('hero.location')} </span>
             <span className="text-emerald-500">{t('hero.country')}</span>
           </h1>
 
-          <p className="text-gray-500 text-base md:text-lg lg:text-xl max-w-lg mx-auto lg:mx-0 leading-relaxed">
+          <p className="text-gray-500 text-base md:text-lg max-w-lg mx-auto lg:mx-0 leading-relaxed">
             {t('hero.descriptionFull')}
           </p>
 
@@ -197,7 +197,7 @@ export const HeroSection = ({ scrollToSection }) => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative h-[500px] lg:h-[600px] w-full flex items-center justify-center lg:justify-end order-1 lg:order-2">
+          className="relative h-[500px] lg:h-[calc(100vh-9rem)] lg:min-h-[420px] lg:max-h-[600px] w-full flex items-center justify-center lg:justify-end order-1 lg:order-2">
            {/* Abstract Shapes */}
           <motion.div
             animate={{ y: [0, -20, 0] }}
